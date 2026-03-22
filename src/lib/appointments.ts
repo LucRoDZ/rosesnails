@@ -21,7 +21,7 @@ export async function getUserAppointments(
     .order("start_at", { ascending: false });
 
   if (error) {
-    console.error("[appointments] fetch error:", error);
+    console.error("[appointments] fetch error — code:", error.code, "| message:", error.message, "| details:", error.details);
     throw new Error("Impossible de récupérer vos rendez-vous.");
   }
 

@@ -124,7 +124,7 @@ async function AppointmentsList({ userId }: { userId: string }) {
         style={{ background: "var(--rose-50)", color: "var(--rose-principal)" }}
         role="alert"
       >
-        {error}
+        Impossible de charger vos rendez-vous. Veuillez réessayer ou contacter le salon.
       </div>
     );
   }

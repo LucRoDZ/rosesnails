@@ -69,6 +69,13 @@ export async function POST(request: NextRequest) {
   }
 
   const { triggerEvent, payload } = body;
+
+  // Cal.com ping test — répondre 200 sans traitement
+  if (!triggerEvent || triggerEvent === "PING") {
+    console.info("[webhook] Ping test reçu — pong");
+    return NextResponse.json({ message: "pong" }, { status: 200 });
+  }
+
   const eventData = payload;
 
   console.info("[webhook] Événement reçu:", triggerEvent);

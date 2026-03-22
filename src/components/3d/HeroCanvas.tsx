@@ -52,10 +52,18 @@ function useWebGLSupport(): boolean | null {
 
 export function HeroCanvas({ scrollProgress = 0 }: { scrollProgress?: number }) {
   const webglSupported = useWebGLSupport();
+  const [contextLost, setContextLost] = useState(false);
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
 
+  // Bascule sur le fallback si le GPU libère le contexte WebGL
+  useEffect(() => {
+    const handleContextLost = () => setContextLost(true);
+    window.addEventListener("webglcontextlost", handleContextLost, true);
+    return () => window.removeEventListener("webglcontextlost", handleContextLost, true);
+  }, []);
+
   if (webglSupported === null) return null;
-  if (webglSupported === false) return <HeroFallback />;
+  if (webglSupported === false || contextLost) return <HeroFallback />;
 
   return (
     <div ref={ref} className="absolute inset-0" aria-hidden="true">
