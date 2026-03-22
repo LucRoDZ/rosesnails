@@ -1,13 +1,25 @@
-import { supabase } from "./supabase";
+import { createServerSupabaseClient } from "./supabase";
 import type { Appointment } from "@/types/database";
 
+/**
+ * Récupère les rendez-vous d'un utilisateur.
+ * Cherche par clerkUserId ET par email (pour les réservations faites avant connexion).
+ */
 export async function getUserAppointments(
-  userId: string
+  userId: string,
+  email?: string
 ): Promise<Appointment[]> {
+  const supabase = createServerSupabaseClient();
+
+  // Double recherche : par Clerk userId OU par email (fallback webhook)
+  const filter = email
+    ? `user_id.eq.${userId},user_id.eq.${email}`
+    : `user_id.eq.${userId}`;
+
   const { data, error } = await supabase
     .from("appointments")
     .select("*")
-    .eq("user_id", userId)
+    .or(filter)
     .order("start_at", { ascending: false });
 
   if (error) {

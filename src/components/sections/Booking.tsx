@@ -1,6 +1,32 @@
+"use client";
+
+import { useUser } from "@clerk/nextjs";
 import { brand } from "@/config/brand";
 
 export function Booking() {
+  const { user, isLoaded } = useUser();
+
+  // Build Cal.com URL — pré-rempli avec les infos Clerk si connecté
+  const calUrl = (() => {
+    const base = `${brand.calcom.baseUrl}/${brand.calcom.username}`;
+    const params = new URLSearchParams({
+      embed: "true",
+      theme: "light",
+      layout: "month_view",
+      brandColor: "#BD1148",
+    });
+
+    if (user) {
+      const fullName = [user.firstName, user.lastName].filter(Boolean).join(" ");
+      if (fullName) params.set("name", fullName);
+      const email = user.primaryEmailAddress?.emailAddress;
+      if (email) params.set("email", email);
+      // Passé au webhook pour lier la réservation au compte Clerk
+      params.set("metadata[clerkUserId]", user.id);
+    }
+
+    return `${base}?${params.toString()}`;
+  })();
 
   return (
     <section id="booking" className="py-24 bg-white">
@@ -18,24 +44,30 @@ export function Booking() {
           </p>
         </div>
 
-        {/* Cal.com iframe embed — aucune dépendance JS externe */}
-        {/* TODO: Remplacer "rosesnails" par votre vrai username Cal.com */}
         <div
           className="rounded-2xl overflow-hidden border"
-          style={{ borderColor: "var(--rose-100)" }}
+          style={{ borderColor: "var(--rose-100)", minHeight: "660px" }}
         >
-          <iframe
-            src={`${brand.calcom.baseUrl}/${brand.calcom.username}?embed=true&theme=light&brandColor=%23BD1148&layout=month_view`}
-            width="100%"
-            height="660"
-            frameBorder="0"
-            title="Calendrier de réservation RosesNails"
-            loading="lazy"
-            style={{ display: "block" }}
-          />
+          {!isLoaded ? (
+            // Skeleton pendant le chargement de Clerk
+            <div
+              className="w-full animate-pulse"
+              style={{ height: "660px", background: "var(--rose-50)" }}
+              role="status"
+              aria-label="Chargement du calendrier…"
+            />
+          ) : (
+            <iframe
+              src={calUrl}
+              width="100%"
+              height="660"
+              title="Calendrier de réservation RosesNails"
+              loading="lazy"
+              style={{ display: "block", border: "none" }}
+            />
+          )}
         </div>
 
-        {/* Fallback link */}
         <p className="text-center mt-4 text-sm" style={{ color: "var(--neutral-700)" }}>
           Problème avec le calendrier ?{" "}
           <a

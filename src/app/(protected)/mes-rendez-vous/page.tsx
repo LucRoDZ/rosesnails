@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -75,11 +75,14 @@ export default async function MesRendezVousPage() {
   const { userId } = await auth();
   if (!userId) redirect("/");
 
+  const user = await currentUser();
+  const email = user?.primaryEmailAddress?.emailAddress;
+
   let appointments: Appointment[] = [];
   let error: string | null = null;
 
   try {
-    appointments = await getUserAppointments(userId);
+    appointments = await getUserAppointments(userId, email);
   } catch (e) {
     error = e instanceof Error ? e.message : "Une erreur est survenue.";
   }
