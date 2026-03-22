@@ -34,12 +34,12 @@ function AppointmentCard({ appointment }: { appointment: Appointment }) {
   return (
     <article
       className={`card flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
-        isPast ? "opacity-60" : ""
+        isPast ? "opacity-55" : ""
       }`}
     >
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-3 mb-2 flex-wrap">
-          <h3 className="font-semibold truncate" style={{ color: "var(--neutral-800)" }}>
+        <div className="flex items-center gap-3 mb-1.5 flex-wrap">
+          <h3 className="font-semibold text-base truncate" style={{ color: "var(--neutral-800)" }}>
             {appointment.service_name}
           </h3>
           <StatusBadge status={appointment.status} />
@@ -47,7 +47,7 @@ function AppointmentCard({ appointment }: { appointment: Appointment }) {
         <p className="text-sm capitalize" style={{ color: "var(--neutral-700)" }}>
           {date} à {time}
         </p>
-        <p className="text-xs mt-1" style={{ color: "var(--neutral-700)", opacity: 0.6 }}>
+        <p className="text-xs mt-1" style={{ color: "var(--neutral-700)", opacity: 0.5 }}>
           {duration} min
         </p>
       </div>
@@ -70,7 +70,10 @@ function AppointmentCard({ appointment }: { appointment: Appointment }) {
 
 function EmptyState({ label }: { label: string }) {
   return (
-    <div className="text-center py-12" style={{ color: "var(--neutral-700)", opacity: 0.6 }}>
+    <div
+      className="text-center py-10 rounded-2xl border"
+      style={{ borderColor: "var(--border-subtle)", color: "var(--neutral-700)", opacity: 0.55 }}
+    >
       <p className="text-sm">{label}</p>
     </div>
   );
@@ -79,8 +82,6 @@ function EmptyState({ label }: { label: string }) {
 // ─── Composant async pour les RDV (streamé séparément) ───────────────────────
 
 async function AppointmentsList({ userId }: { userId: string }) {
-  // Email depuis JWT si disponible (config Clerk → Sessions → Customize session token)
-  // Sinon appel API Clerk en parallèle avec la requête Supabase
   const { sessionClaims } = await auth();
   const emailFromJwt = (sessionClaims as Record<string, unknown>)?.email as string | undefined;
 
@@ -89,18 +90,14 @@ async function AppointmentsList({ userId }: { userId: string }) {
 
   try {
     if (emailFromJwt) {
-      // Chemin rapide : email dans le JWT → 0 appel Clerk supplémentaire
       appointments = await getUserAppointments(userId, emailFromJwt);
     } else {
-      // Parallèle : profil Clerk + requête Supabase par userId en même temps
       const [user, apptsByUserId] = await Promise.all([
         currentUser(),
         getUserAppointments(userId),
       ]);
       const email = user?.primaryEmailAddress?.emailAddress;
-
       if (apptsByUserId.length === 0 && email) {
-        // Aucun résultat par userId → réessai par email (cas webhook avec email en user_id)
         appointments = await getUserAppointments(userId, email);
       } else {
         appointments = apptsByUserId;
@@ -135,7 +132,7 @@ async function AppointmentsList({ userId }: { userId: string }) {
       <section aria-labelledby="upcoming-title" className="mb-12">
         <h2
           id="upcoming-title"
-          className="text-sm font-bold uppercase tracking-widest mb-6"
+          className="text-[10px] font-bold uppercase tracking-[0.25em] mb-5"
           style={{ color: "var(--rose-principal)" }}
         >
           À venir
@@ -143,14 +140,14 @@ async function AppointmentsList({ userId }: { userId: string }) {
         {upcoming.length === 0 ? (
           <EmptyState label="Aucun rendez-vous à venir. Réservez dès maintenant !" />
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3">
             {upcoming.map((a) => (
               <AppointmentCard key={a.id} appointment={a} />
             ))}
           </div>
         )}
         <div className="mt-6">
-          <Link href="/#booking" className="btn-primary text-sm">
+          <Link href="/#booking" className="btn-primary text-sm px-6 py-2.5">
             Prendre un nouveau rendez-vous
           </Link>
         </div>
@@ -161,12 +158,12 @@ async function AppointmentsList({ userId }: { userId: string }) {
         <section aria-labelledby="past-title">
           <h2
             id="past-title"
-            className="text-sm font-bold uppercase tracking-widest mb-6"
-            style={{ color: "var(--neutral-700)" }}
+            className="text-[10px] font-bold uppercase tracking-[0.25em] mb-5"
+            style={{ color: "var(--neutral-700)", opacity: 0.6 }}
           >
             Historique
           </h2>
-          <div className="space-y-4">
+          <div className="space-y-3">
             {past.map((a) => (
               <AppointmentCard key={a.id} appointment={a} />
             ))}
@@ -186,22 +183,27 @@ export default async function MesRendezVousPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen pt-24 pb-16" style={{ backgroundColor: "var(--neutral-50)" }}>
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* En-tête — affiché immédiatement, sans attendre les RDV */}
+      <main
+        className="min-h-screen pt-24 pb-20"
+        style={{ backgroundColor: "var(--neutral-50)" }}
+      >
+        <div className="max-w-3xl mx-auto px-5 sm:px-8">
+          {/* Page header */}
           <div className="mb-10">
+            <span className="section-label">Mon espace</span>
+            <div className="divider-rose" />
             <h1
-              className="text-3xl md:text-4xl font-bold mb-2"
+              className="text-3xl md:text-4xl font-bold"
               style={{ fontFamily: "var(--font-display)", color: "var(--neutral-800)" }}
             >
               Mes rendez-vous
             </h1>
-            <p style={{ color: "var(--neutral-700)" }}>
+            <p className="mt-2 text-sm" style={{ color: "var(--neutral-700)" }}>
               Retrouvez ici tous vos rendez-vous passés et à venir.
             </p>
           </div>
 
-          {/* Streaming : skeleton visible pendant le chargement des RDV */}
+          {/* Streaming content */}
           <Suspense fallback={<SkeletonList count={3} />}>
             <AppointmentsList userId={userId} />
           </Suspense>

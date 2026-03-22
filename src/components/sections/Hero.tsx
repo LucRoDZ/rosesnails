@@ -12,11 +12,7 @@ export function Hero() {
     const handleScroll = () => {
       if (!heroRef.current) return;
       const rect = heroRef.current.getBoundingClientRect();
-      const progress = Math.max(
-        0,
-        Math.min(1, -rect.top / (rect.height * 0.8))
-      );
-      setScrollProgress(progress);
+      setScrollProgress(Math.max(0, Math.min(1, -rect.top / (rect.height * 0.8))));
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -26,50 +22,65 @@ export function Hero() {
     <section
       ref={heroRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
-      style={{ background: "linear-gradient(160deg, #0f0a0d 0%, #1a1018 40%, #2d1024 100%)" }}
+      style={{ background: "linear-gradient(155deg, #0f0a0d 0%, #1a1018 50%, #2d1024 100%)" }}
       aria-label="Accueil"
     >
-      {/* 3D Background */}
+      {/* 3D canvas */}
       <HeroCanvas scrollProgress={scrollProgress} />
 
-      {/* Gradient overlay for text readability */}
+      {/* Radial vignette for text readability */}
       <div
         className="absolute inset-0 pointer-events-none"
         aria-hidden="true"
         style={{
-          background:
-            "radial-gradient(ellipse at center, transparent 30%, rgba(15,10,13,0.7) 100%)",
+          background: "radial-gradient(ellipse 80% 70% at 50% 50%, transparent 20%, rgba(15,10,13,0.65) 100%)",
         }}
       />
 
       {/* Content */}
-      <div className="relative z-10 text-center px-6 max-w-2xl mx-auto">
-        <p
-          className="text-sm font-semibold uppercase tracking-[0.25em] mb-4"
-          style={{ color: "var(--rose-accent)" }}
-        >
-          Prothésiste ongulaire
-        </p>
+      <div className="relative z-10 text-center px-5 max-w-2xl mx-auto">
+        {/* Label */}
+        <p className="section-label-dark mb-4">Prothésiste ongulaire</p>
+
+        {/* Headline */}
         <h1
-          className="text-5xl md:text-7xl font-bold text-white mb-6 leading-[1.1]"
-          style={{ fontFamily: "var(--font-display)" }}
+          className="font-bold text-white leading-[1.1] mb-6"
+          style={{
+            fontFamily: "var(--font-display)",
+            fontSize: "clamp(2.75rem, 8vw, 5.5rem)",
+          }}
         >
           L&apos;art des ongles,{" "}
-          <span style={{ color: "var(--rose-accent)" }}>sublimé.</span>
+          <em className="not-italic" style={{ color: "var(--rose-accent)" }}>sublimé.</em>
         </h1>
-        <p className="text-lg md:text-xl mb-10 max-w-lg mx-auto" style={{ color: "rgba(255,255,255,0.7)" }}>
-          Pose gel, nail art personnalisé. 
+
+        {/* Divider accent */}
+        <div
+          className="mx-auto mb-6"
+          style={{
+            width: "2.5rem",
+            height: "1.5px",
+            background: "linear-gradient(90deg, var(--rose-principal), var(--rose-accent))",
+            borderRadius: "1px",
+          }}
+          aria-hidden="true"
+        />
+
+        {/* Subtitle */}
+        <p
+          className="text-base md:text-lg mb-10 max-w-sm mx-auto leading-relaxed"
+          style={{ color: "rgba(255,255,255,0.65)" }}
+        >
+          Pose gel &amp; nail art personnalisé — chaque set est une œuvre.
         </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link href="/#booking" className="btn-primary text-base px-8 py-4">
+
+        {/* CTAs */}
+        <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+          <Link href="/#booking" className="btn-primary px-8 py-3.5">
             Prendre rendez-vous
           </Link>
-          <Link
-            href="/#services"
-            className="btn-outline text-base px-8 py-4"
-            style={{ color: "white", borderColor: "rgba(255,255,255,0.4)" }}
-          >
-            Voir les prestations
+          <Link href="/#services" className="btn-ghost px-8 py-3.5">
+            Nos prestations
           </Link>
         </div>
       </div>
@@ -79,12 +90,12 @@ export function Hero() {
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         aria-hidden="true"
       >
-        <p className="text-xs uppercase tracking-wider" style={{ color: "rgba(255,255,255,0.4)" }}>
+        <p className="text-xs uppercase tracking-[0.2em]" style={{ color: "rgba(255,255,255,0.35)" }}>
           Découvrir
         </p>
         <div
-          className="w-px h-12"
-          style={{ background: "linear-gradient(to bottom, rgba(255,255,255,0.4), transparent)" }}
+          className="w-px h-10"
+          style={{ background: "linear-gradient(to bottom, rgba(255,255,255,0.35), transparent)" }}
         />
       </div>
     </section>
