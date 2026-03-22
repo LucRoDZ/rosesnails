@@ -10,8 +10,7 @@ export const brand = {
     closed: "Fermé le lundi",
   },
   social: {
-    instagram: "https://www.instagram.com/rosesnails.fr",
-    facebook: "https://www.facebook.com/rosesnails.fr",
+    instagram: "https://www.instagram.com/r.osesnails/",
   },
   calcom: {
     username: "r.osesnails",

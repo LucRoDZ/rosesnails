@@ -1,3 +1,5 @@
+import { brand } from "@/config/brand";
+
 export function Portfolio() {
   const placeholders = Array.from({ length: 6 }, (_, i) => i + 1);
 
@@ -48,7 +50,7 @@ export function Portfolio() {
         <p className="text-center mt-8 text-sm" style={{ color: "var(--neutral-700)" }}>
           Retrouvez toutes nos créations sur{" "}
           <a
-            href="https://www.instagram.com/rosesnails.fr"
+            href={brand.social.instagram}
             target="_blank"
             rel="noopener noreferrer"
             className="font-medium underline underline-offset-2"

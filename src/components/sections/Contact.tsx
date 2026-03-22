@@ -77,15 +77,6 @@ export function Contact() {
                 >
                   Instagram
                 </a>
-                <a
-                  href={brand.social.facebook}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-outline text-sm px-4 py-2"
-                  aria-label="Facebook"
-                >
-                  Facebook
-                </a>
               </div>
             </div>
           </div>

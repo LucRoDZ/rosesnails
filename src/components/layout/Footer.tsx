@@ -30,16 +30,6 @@ export function Footer() {
               >
                 Instagram
               </a>
-              <a
-                href={brand.social.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm transition-colors"
-                style={{ color: "rgba(247,243,245,0.6)" }}
-                aria-label="Facebook RosesNails"
-              >
-                Facebook
-              </a>
             </div>
           </div>
 
