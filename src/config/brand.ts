@@ -14,7 +14,7 @@ export const brand = {
     facebook: "https://www.facebook.com/rosesnails.fr",
   },
   calcom: {
-    username: "rosesnails",
+    username: "r.osesnails",
     baseUrl: "https://cal.com",
   },
   cancellationPolicy:
