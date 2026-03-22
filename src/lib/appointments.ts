@@ -11,15 +11,13 @@ export async function getUserAppointments(
 ): Promise<Appointment[]> {
   const supabase = createServerSupabaseClient();
 
-  // Double recherche : par Clerk userId OU par email (fallback webhook)
-  const filter = email
-    ? `user_id.eq.${userId},user_id.eq.${email}`
-    : `user_id.eq.${userId}`;
+  // Recherche par Clerk userId OU par email (fallback si webhook a stocké l'email)
+  const userIds = email ? [userId, email] : [userId];
 
   const { data, error } = await supabase
     .from("appointments")
     .select("*")
-    .or(filter)
+    .in("user_id", userIds)
     .order("start_at", { ascending: false });
 
   if (error) {

@@ -47,13 +47,16 @@ export async function POST(request: NextRequest) {
   try {
     rawBody = await request.text();
   } catch {
+    console.error("[webhook] Failed to read body");
     return NextResponse.json({ error: "Invalid body" }, { status: 400 });
   }
 
-  // Verify webhook signature
+  // Vérification signature
   const signature = extractCalcomSignature(request);
+  console.info("[webhook] Incoming request — signature present:", !!signature);
+
   if (!signature || !verifyCalcomWebhookSignature(rawBody, signature)) {
-    console.warn("[webhook] Invalid signature");
+    console.warn("[webhook] Signature invalide — requête rejetée");
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -61,20 +64,28 @@ export async function POST(request: NextRequest) {
   try {
     body = JSON.parse(rawBody) as CalcomBookingPayload;
   } catch {
+    console.error("[webhook] JSON invalide");
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
   const { triggerEvent, payload } = body;
   const eventData = payload;
 
-  if (!eventData?.uid) {
+  console.info("[webhook] Événement reçu:", triggerEvent);
+  console.info("[webhook] Booking UID:", eventData?.uid ?? body.uid ?? "MANQUANT");
+  console.info("[webhook] Attendees:", JSON.stringify(eventData?.attendees ?? []));
+  console.info("[webhook] Metadata:", JSON.stringify(eventData?.metadata ?? {}));
+
+  // Support uid au niveau racine ou dans payload selon la version Cal.com
+  const externalEventId = eventData?.uid ?? body.uid;
+  if (!externalEventId) {
+    console.error("[webhook] UID manquant dans le payload");
     return NextResponse.json({ error: "Missing event uid" }, { status: 400 });
   }
 
-  const externalEventId = eventData.uid;
   const supabase = createServerSupabaseClient();
 
-  // Idempotency check: have we processed this exact event?
+  // Idempotence : événement déjà traité ?
   const eventKey = `${triggerEvent}:${externalEventId}`;
   const { data: existingEvent } = await supabase
     .from("webhook_events")
@@ -83,58 +94,52 @@ export async function POST(request: NextRequest) {
     .maybeSingle();
 
   if (existingEvent) {
-    console.info(`[webhook] Duplicate event skipped: ${eventKey}`);
+    console.info(`[webhook] Doublon ignoré: ${eventKey}`);
     return NextResponse.json({ message: "Already processed" }, { status: 200 });
   }
 
-  // Extract user identifier from Cal.com attendees
-  // Cal.com sends the user's email; match by user metadata if needed
+  // Extraction de l'identifiant utilisateur
+  // Priorité: clerkUserId dans metadata > externalId > email
   const attendeeEmail =
-    eventData.attendees?.[0]?.email ??
-    eventData.responses?.email?.value ??
+    eventData?.attendees?.[0]?.email ??
+    eventData?.responses?.email?.value ??
     null;
 
-  // We store the Clerk user_id in Cal.com metadata or look it up
-  // For V1, store the email and resolve later, or require the user to be authenticated
-  // The attendee external_id from Cal.com can carry the Clerk userId if configured
-  const clerkUserId =
-    eventData.attendees?.[0]?.externalId ??
-    eventData.metadata?.clerkUserId ??
-    attendeeEmail ?? // fallback: store email as user identifier
+  const userId =
+    eventData?.metadata?.clerkUserId ??
+    eventData?.attendees?.[0]?.externalId ??
+    attendeeEmail ??
     "unknown";
+
+  console.info(`[webhook] user_id qui sera stocké: "${userId}" (email: "${attendeeEmail}")`);
 
   const status = mapCalcomStatus(triggerEvent);
   const now = new Date().toISOString();
 
-  // Upsert appointment — use any-cast to avoid complex Supabase generic resolution
-  // The type safety is enforced by the Appointment interface above
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const appointmentsTable = supabase.from("appointments") as any;
-  const { error: upsertError } = await appointmentsTable.upsert(
+  const { error: upsertError } = await (supabase.from("appointments") as any).upsert(
     {
-      user_id: clerkUserId,
+      user_id: userId,
       external_event_id: externalEventId,
-      service_name: (eventData.title ?? eventData.type ?? "Prestation") as string,
-      start_at: eventData.startTime as string,
-      end_at: eventData.endTime as string,
+      service_name: eventData?.title ?? eventData?.type ?? "Prestation",
+      start_at: eventData?.startTime,
+      end_at: eventData?.endTime,
       status,
       notes: null,
     },
-    {
-      onConflict: "external_event_id",
-      ignoreDuplicates: false,
-    }
+    { onConflict: "external_event_id", ignoreDuplicates: false }
   );
 
   if (upsertError) {
-    console.error("[webhook] Upsert error:", upsertError);
+    console.error("[webhook] Erreur upsert Supabase:", JSON.stringify(upsertError));
     return NextResponse.json({ error: "Database error" }, { status: 500 });
   }
 
-  // Log processed event for idempotency
+  console.info(`[webhook] ✓ RDV sauvegardé — booking: ${externalEventId}, user: ${userId}`);
+
+  // Log idempotence (non bloquant)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const webhookEventsTable = supabase.from("webhook_events") as any;
-  const { error: logError } = await webhookEventsTable.insert({
+  const { error: logError } = await (supabase.from("webhook_events") as any).insert({
     event_id: eventKey,
     event_type: triggerEvent,
     payload: body as unknown as Record<string, unknown>,
@@ -142,10 +147,8 @@ export async function POST(request: NextRequest) {
   });
 
   if (logError) {
-    // Non-fatal: appointment was saved, just log
-    console.error("[webhook] Event log error:", logError);
+    console.warn("[webhook] Log idempotence échoué (non bloquant):", logError.message);
   }
 
-  console.info(`[webhook] Processed ${triggerEvent} for booking ${externalEventId}`);
   return NextResponse.json({ message: "OK" }, { status: 200 });
 }

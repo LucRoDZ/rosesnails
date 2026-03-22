@@ -48,7 +48,7 @@ export function Hero() {
           className="text-sm font-semibold uppercase tracking-[0.25em] mb-4"
           style={{ color: "var(--rose-accent)" }}
         >
-          Prothésiste ongulaire · Paris
+          Prothésiste ongulaire
         </p>
         <h1
           className="text-5xl md:text-7xl font-bold text-white mb-6 leading-[1.1]"
@@ -58,7 +58,7 @@ export function Hero() {
           <span style={{ color: "var(--rose-accent)" }}>sublimé.</span>
         </h1>
         <p className="text-lg md:text-xl mb-10 max-w-lg mx-auto" style={{ color: "rgba(255,255,255,0.7)" }}>
-          Pose gel, acrylique, nail art personnalisé. Vivez une expérience unique dans un cadre élégant.
+          Pose gel, nail art personnalisé. 
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link href="/#booking" className="btn-primary text-base px-8 py-4">
