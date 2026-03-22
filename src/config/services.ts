@@ -1,91 +1,127 @@
 export type ServiceCategory =
-  | "pose"
-  | "entretien"
-  | "nail-art"
-  | "soin"
-  | "retrait";
+  | "gel-extension"
+  | "ongles-naturels"
+  | "press-on";
 
 export interface Service {
   id: string;
   name: string;
-  description: string;
-  duration: number; // minutes
+  description?: string;
+  duration: number; // minutes (estimated)
   price: number; // euros
   category: ServiceCategory;
   popular?: boolean;
-  calcomEventType?: string;
 }
 
 export const services: Service[] = [
+  // ── Pose en gel extension ───────────────────────────────────────────────────
   {
-    id: "pose-gel",
-    name: "Pose Gel Complète",
-    description: "Pose de capsules gel avec finition french ou couleur unie.",
+    id: "gel-pose-deco",
+    name: "Pose avec décorations",
     duration: 90,
-    price: 75,
-    category: "pose",
-    popular: true,
-    calcomEventType: "pose-gel",
-  },
-  {
-    id: "pose-acrylique",
-    name: "Pose Acrylique",
-    description: "Pose acrylique longue durée, résistante et naturelle.",
-    duration: 90,
-    price: 80,
-    category: "pose",
-    calcomEventType: "pose-acrylique",
-  },
-  {
-    id: "remplissage",
-    name: "Remplissage Gel / Acrylique",
-    description: "Remplissage et remise en forme de votre pose existante.",
-    duration: 60,
-    price: 50,
-    category: "entretien",
-    popular: true,
-    calcomEventType: "remplissage",
-  },
-  {
-    id: "nail-art-simple",
-    name: "Nail Art Simple",
-    description: "Dégradé, paillettes, stamping — motif unique par set.",
-    duration: 30,
-    price: 20,
-    category: "nail-art",
-    calcomEventType: "nail-art",
-  },
-  {
-    id: "nail-art-custom",
-    name: "Nail Art Personnalisé",
-    description: "Illustration, 3D, chromés — création sur-mesure.",
-    duration: 60,
     price: 40,
-    category: "nail-art",
-    calcomEventType: "nail-art-custom",
+    category: "gel-extension",
+    popular: true,
   },
   {
-    id: "soin-mains",
-    name: "Soin des Mains",
-    description: "Gommage, masque, massage et hydratation intense.",
-    duration: 30,
-    price: 25,
-    category: "soin",
+    id: "gel-pose-sans",
+    name: "Pose sans décorations",
+    duration: 75,
+    price: 35,
+    category: "gel-extension",
   },
   {
-    id: "retrait-gel",
-    name: "Retrait Gel / Acrylique",
-    description: "Retrait soigneux sans abîmer vos ongles naturels.",
-    duration: 30,
+    id: "gel-remplissage-deco",
+    name: "Remplissage avec décorations",
+    duration: 75,
+    price: 35,
+    category: "gel-extension",
+  },
+  {
+    id: "gel-remplissage-sans",
+    name: "Remplissage sans décorations",
+    duration: 60,
+    price: 30,
+    category: "gel-extension",
+  },
+
+  // ── Ongles naturels ─────────────────────────────────────────────────────────
+  {
+    id: "nat-semi-deco",
+    name: "Semi permanent avec décorations",
+    duration: 60,
     price: 20,
-    category: "retrait",
+    category: "ongles-naturels",
+  },
+  {
+    id: "nat-semi",
+    name: "Semi permanent",
+    duration: 45,
+    price: 15,
+    category: "ongles-naturels",
+  },
+  {
+    id: "nat-gainage-deco",
+    name: "Gainage avec décorations",
+    duration: 75,
+    price: 30,
+    category: "ongles-naturels",
+  },
+  {
+    id: "nat-gainage",
+    name: "Gainage",
+    duration: 60,
+    price: 25,
+    category: "ongles-naturels",
+  },
+
+  // ── Press-on ────────────────────────────────────────────────────────────────
+  {
+    id: "press-couleur",
+    name: "Couleur unie",
+    duration: 30,
+    price: 10,
+    category: "press-on",
+  },
+  {
+    id: "press-french",
+    name: "Couleur unie + french",
+    duration: 30,
+    price: 12,
+    category: "press-on",
+  },
+  {
+    id: "press-art1",
+    name: "Nail art niveau 1",
+    duration: 45,
+    price: 20,
+    category: "press-on",
+    popular: true,
+  },
+  {
+    id: "press-art2",
+    name: "Nail art niveau 2",
+    duration: 60,
+    price: 22,
+    category: "press-on",
+  },
+  {
+    id: "press-art3",
+    name: "Nail art niveau 3",
+    duration: 75,
+    price: 25,
+    category: "press-on",
   },
 ];
 
 export const serviceCategories: Record<ServiceCategory, string> = {
-  pose: "Poses",
-  entretien: "Entretien",
-  "nail-art": "Nail Art",
-  soin: "Soins",
-  retrait: "Retrait",
+  "gel-extension": "Pose en gel extension",
+  "ongles-naturels": "Ongles naturels",
+  "press-on": "Press-on",
 };
+
+/** Suppléments affichés comme note en bas du tableau des tarifs */
+export const supplements = [
+  { label: "Longueur (L ou XL)", price: "+5€" },
+  { label: "Retard de plus de 10 min", price: "+5€", note: "Au-delà de 20 min : non accepté" },
+];

@@ -1,11 +1,11 @@
 import { Hero } from "@/components/sections/Hero";
 import { Services } from "@/components/sections/Services";
 import { Portfolio } from "@/components/sections/Portfolio";
-import { Reviews } from "@/components/sections/Reviews";
+// import { Reviews } from "@/components/sections/Reviews";
 import { Booking } from "@/components/sections/Booking";
 import { Faq } from "@/components/sections/Faq";
 import { Contact } from "@/components/sections/Contact";
-import { InstagramFeed } from "@/components/sections/InstagramFeed";
+// import { InstagramFeed } from "@/components/sections/InstagramFeed";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { StickyBookingCta } from "@/components/ui/StickyBookingCta";
@@ -18,10 +18,10 @@ export default function HomePage() {
         <Hero />
         <Services />
         <Portfolio />
-        <Reviews />
+        {/* <Reviews /> */}
         <Booking />
         <Faq />
-        <InstagramFeed />
+        {/* <InstagramFeed /> */}
         <Contact />
       </main>
       <Footer />

@@ -9,7 +9,6 @@ import { brand } from "@/config/brand";
 const navLinks = [
   { href: "/#services",  label: "Prestations" },
   { href: "/#portfolio", label: "Portfolio" },
-  { href: "/#avis",      label: "Avis" },
   { href: "/#contact",   label: "Contact" },
 ];
 
