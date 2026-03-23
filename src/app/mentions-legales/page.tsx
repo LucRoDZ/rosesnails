@@ -24,19 +24,13 @@ export default function MentionsLegalesPage() {
               <h2 className="font-semibold mb-2" style={{ color: "var(--neutral-800)" }}>
                 Éditeur du site
               </h2>
-              <p className="text-sm" style={{ color: "var(--neutral-700)" }}>
-                {brand.name}<br />
-                {brand.address}<br />
-                {brand.email}<br />
-                {brand.phone}
-              </p>
             </section>
             <section>
               <h2 className="font-semibold mb-2" style={{ color: "var(--neutral-800)" }}>
                 Hébergement
               </h2>
               <p className="text-sm" style={{ color: "var(--neutral-700)" }}>
-                Ce site est hébergé par Vercel Inc., 340 Pine Street, Suite 701, San Francisco, CA 94104, USA.
+                Ce site est hébergé par une infrastructure cloud sécurisée, avec maintenance et mises à jour continues.
               </p>
             </section>
             <section>

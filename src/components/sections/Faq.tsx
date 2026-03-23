@@ -7,7 +7,7 @@ const faqs = [
   {
     id: 1,
     question: "Combien de temps dure une pose gel ?",
-    answer: "Une pose gel complète dure environ 1h30. La durée peut varier selon la complexité du nail art choisi.",
+    answer: "Une pose gel complète dure environ 1h30. La durée peut cependant varier selon la complexité du nail art choisi.",
   },
   {
     id: 2,
@@ -17,102 +17,90 @@ const faqs = [
   {
     id: 3,
     question: "Faut-il préparer ses ongles avant le rendez-vous ?",
-    answer: "Venez avec vos ongles naturels, sans vernis. Si vous avez une ancienne pose, nous pouvons effectuer le retrait lors de votre rendez-vous (supplément possible).",
+    answer: "Venez avec vos ongles naturels, sans vernis. Si vous avez une ancienne pose, je peux aussi effectuer le retrait.",
   },
   {
     id: 4,
     question: "Comment prendre rendez-vous ?",
-    answer: "Réservez directement en ligne via notre système de réservation. Vous recevrez une confirmation par email avec tous les détails.",
+    answer: "Réservez directement en ligne via le système de réservation. Vous recevrez une confirmation par email avec tous les détails.",
   },
   {
     id: 5,
-    question: "Proposez-vous des tarifs groupes ou EVJF ?",
-    answer: "Oui ! Contactez-nous directement par email ou téléphone pour organiser votre événement et obtenir un devis personnalisé.",
-  },
-  {
-    id: 6,
     question: "Puis-je apporter mes propres références ?",
-    answer: "Absolument, nous vous encourageons à apporter vos inspirations. Cela nous aide à créer exactement ce dont vous rêvez.",
+    answer: "Absolument, Je vous encourage à apporter vos inspirations. Cela m'aide à créer exactement ce dont vous rêvez.",
   },
 ];
 
-function FaqItem({ faq, index }: { faq: typeof faqs[0]; index: number }) {
+function FaqItem({ faq }: { faq: typeof faqs[0] }) {
   const [open, setOpen] = useState(false);
   const id = `faq-answer-${faq.id}`;
 
   return (
     <div
-      className="border-b last:border-b-0 transition-colors duration-200"
+      className="rounded-2xl transition-all duration-300"
       style={{
-        borderColor: "rgba(189,17,72,0.08)",
-        background: open ? "rgba(255,240,245,0.5)" : "transparent",
+        border: open ? "1px solid rgba(189,17,72,0.24)" : "1px solid rgba(189,17,72,0.1)",
+        background: open ? "rgba(255,240,245,0.7)" : "white",
+        boxShadow: open ? "0 12px 30px rgba(189,17,72,0.1)" : "0 6px 20px rgba(26,15,22,0.05)",
       }}
     >
       <button
-        className="w-full px-8 py-8 flex items-center justify-between text-left gap-8 group"
+        className="w-full px-5 md:px-8 py-5 md:py-6 flex items-center justify-between text-left gap-5 group"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-controls={id}
       >
-        <div className="flex items-center gap-6 min-w-0">
-          {/* Number accent */}
-          <span
-            className="flex-shrink-0 font-semibold select-none tabular-nums"
-            style={{
-              fontFamily: "var(--font-display)",
-              fontSize: "1.5rem",
-              lineHeight: 1,
-              color: open ? "var(--rose-principal)" : "rgba(189,17,72,0.15)",
-              transition: "color 200ms ease",
-              minWidth: "2.25rem",
-            }}
-          >
-            {String(index + 1).padStart(2, "0")}
-          </span>
-          <span
-            className="font-medium leading-snug"
-            style={{
-              fontSize: "clamp(0.9375rem, 1.5vw, 1.0625rem)",
-              color: open ? "var(--rose-principal)" : "var(--neutral-800)",
-              transition: "color 200ms ease",
-            }}
-          >
-            {faq.question}
-          </span>
-        </div>
-
-        {/* Chevron */}
-        <div
-          className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300"
+        <span
+          className="font-medium leading-snug"
           style={{
-            background: open ? "var(--rose-principal)" : "rgba(189,17,72,0.07)",
+            fontSize: "clamp(0.98rem, 1.5vw, 1.1rem)",
+            color: open ? "var(--rose-principal)" : "var(--neutral-800)",
+            transition: "color 200ms ease",
+          }}
+        >
+          {faq.question}
+        </span>
+
+        <span
+          className="w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center flex-shrink-0"
+          style={{
+            background: "rgba(189,17,72,0.08)",
+            color: "var(--rose-principal)",
           }}
         >
           <svg
-            width="14"
-            height="14"
-            viewBox="0 0 14 14"
+            width="18"
+            height="18"
+            viewBox="0 0 20 20"
             fill="none"
-            className={`transition-transform duration-300 ${open ? "rotate-180" : ""}`}
-            style={{ color: open ? "white" : "var(--rose-principal)" }}
+            style={{
+              transform: open ? "rotate(180deg)" : "rotate(0deg)",
+              transition: "transform 280ms cubic-bezier(0.4, 0, 0.2, 1)",
+            }}
             aria-hidden="true"
           >
-            <path d="M2.5 5l4.5 4.5L11.5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M4 7l6 6 6-6" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-        </div>
+        </span>
       </button>
 
       <div
         id={id}
-        className="overflow-hidden transition-all duration-300"
-        style={{ maxHeight: open ? "500px" : "0" }}
+        style={{
+          display: "grid",
+          gridTemplateRows: open ? "1fr" : "0fr",
+          transition: "grid-template-rows 320ms ease",
+        }}
+        aria-hidden={!open}
       >
-        <p
-          className="px-8 pb-8 text-base leading-relaxed"
-          style={{ color: "var(--neutral-700)", paddingLeft: "calc(2rem + 2.25rem + 1.5rem)" }}
-        >
-          {faq.answer}
-        </p>
+        <div style={{ overflow: "hidden" }}>
+          <p
+            className="px-5 md:px-8 pb-5 md:pb-6 text-sm md:text-base leading-relaxed"
+            style={{ color: "var(--neutral-700)" }}
+          >
+            {faq.answer}
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -122,8 +110,8 @@ export function Faq() {
   return (
     <section
       id="faq"
-      className="relative py-28 md:py-40 overflow-hidden"
-      style={{ background: "var(--rose-50)" }}
+      className="relative section-block overflow-hidden"
+      style={{ background: "linear-gradient(182deg, #fff0f5 0%, #fff6fa 46%, #fff 100%)" }}
     >
       {/* Decorative orbs */}
       <div
@@ -141,29 +129,21 @@ export function Faq() {
         }}
       />
 
-      <div className="relative max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
+      <div className="relative shell">
 
         {/* Header */}
-        <div className="mb-16 md:mb-20">
+        <div className="mb-14 md:mb-20 section-head">
           <span className="section-label">Questions fréquentes</span>
-          <div className="divider-rose mt-4 mb-0" />
-          <h2 className="section-title mt-6">
-            Vos{" "}
+          <div className="divider-rose mt-1 mb-1" />
+          <h2 className="section-title mt-1 max-w-xl">
+            Toutes vos{" "}
             <em style={{ fontStyle: "italic", color: "var(--rose-principal)" }}>questions</em>
           </h2>
         </div>
 
-        {/* Single full-width accordion card */}
-        <div
-          className="rounded-2xl overflow-hidden"
-          style={{
-            background: "white",
-            border: "1px solid rgba(189,17,72,0.1)",
-            boxShadow: "0 8px 48px rgba(189,17,72,0.08), 0 2px 16px rgba(26,15,22,0.06)",
-          }}
-        >
-          {faqs.map((faq, i) => (
-            <FaqItem key={faq.id} faq={faq} index={i} />
+        <div className="grid grid-cols-1 gap-4 md:gap-5">
+          {faqs.map((faq) => (
+            <FaqItem key={faq.id} faq={faq} />
           ))}
         </div>
       </div>

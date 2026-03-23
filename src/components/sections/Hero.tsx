@@ -46,6 +46,8 @@ export function Hero() {
           style={{
             border: "1px solid rgba(254,146,191,0.2)",
             background: "rgba(254,146,191,0.06)",
+            animation: "var(--animate-float)",
+            animationDelay: "0.3s",
           }}
         >
           <span
@@ -63,7 +65,7 @@ export function Hero() {
               color: "var(--rose-accent)",
             }}
           >
-            Prothésiste ongulaire · Paris
+            Prothésiste ongulaire
           </span>
         </div>
 
@@ -114,7 +116,7 @@ export function Hero() {
         </p>
 
         {/* CTAs */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <div className="cta-stack justify-center items-center">
           <Link href="/#booking" className="btn-primary">
             Prendre rendez-vous
           </Link>
@@ -131,7 +133,11 @@ export function Hero() {
       >
         <div
           className="w-px h-14"
-          style={{ background: "linear-gradient(to bottom, rgba(255,255,255,0.25), transparent)" }}
+          style={{
+            background: "linear-gradient(to bottom, rgba(255,255,255,0.28), transparent)",
+            animation: "var(--animate-scroll-pulse)",
+            transformOrigin: "top",
+          }}
         />
         <svg width="12" height="8" viewBox="0 0 12 8" fill="none" style={{ color: "rgba(255,255,255,0.25)" }}>
           <path d="M1 1l5 5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />

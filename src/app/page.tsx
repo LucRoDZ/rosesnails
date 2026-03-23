@@ -4,7 +4,6 @@ import { Portfolio } from "@/components/sections/Portfolio";
 // import { Reviews } from "@/components/sections/Reviews";
 import { Booking } from "@/components/sections/Booking";
 import { Faq } from "@/components/sections/Faq";
-import { Contact } from "@/components/sections/Contact";
 // import { InstagramFeed } from "@/components/sections/InstagramFeed";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -22,7 +21,6 @@ export default function HomePage() {
         <Booking />
         <Faq />
         {/* <InstagramFeed /> */}
-        <Contact />
       </main>
       <Footer />
       <StickyBookingCta />

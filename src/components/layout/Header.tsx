@@ -4,17 +4,19 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Show, SignInButton, UserButton } from "@clerk/nextjs";
+import { AnimatePresence, motion } from "framer-motion";
 import { brand } from "@/config/brand";
 
 const navLinks = [
-  { href: "/#services",  label: "Prestations" },
+  { href: "/#services", label: "Prestations" },
   { href: "/#portfolio", label: "Portfolio" },
-  { href: "/#contact",   label: "Contact" },
+  { href: "/#faq", label: "FAQ" },
+  { href: "/#booking", label: "Réservation" },
 ];
 
 export function Header() {
-  const [scrolled,  setScrolled]  = useState(false);
-  const [menuOpen,  setMenuOpen]  = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -23,210 +25,221 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    const onHashChange = () => setMenuOpen(false);
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
+
+  // Close menu on route change
   useEffect(() => { setMenuOpen(false); }, [pathname]);
 
+  // Body scroll lock
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [menuOpen]);
+
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-white/96 backdrop-blur-md" : "bg-transparent"
-      }`}
-      style={scrolled ? { borderBottom: "1px solid var(--border-rose)" } : {}}
-      role="banner"
-    >
-      {/* ── Bar ──────────────────────────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
-        <div className="flex items-center justify-between h-[66px] md:h-[76px]">
-
-          {/* Logo */}
-          <Link href="/" aria-label={`${brand.name} — Accueil`} className="flex-shrink-0">
-            <span
-              style={{
-                fontFamily: "var(--font-display)",
-                fontSize: "clamp(1.25rem, 2.5vw, 1.625rem)",
-                fontWeight: 600,
-                color: scrolled ? "var(--rose-principal)" : "white",
-                transition: "color 300ms ease",
-                letterSpacing: "-0.01em",
-              }}
-            >
-              {brand.name}
-            </span>
-          </Link>
-
-          {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-10" aria-label="Navigation principale">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-sm font-medium relative group transition-opacity hover:opacity-70"
+    <>
+      <header
+        className="fixed top-0 left-0 right-0 z-50"
+        role="banner"
+      >
+        <div className="shell pt-3 md:pt-4">
+          <div
+            className="flex items-center justify-between h-[64px] md:h-[72px] rounded-2xl px-4 md:px-6 transition-all duration-300"
+            style={{
+              background: "rgba(255, 255, 255, 0.9)",
+              border: "1px solid rgba(189, 17, 72, 0.12)",
+              backdropFilter: "blur(14px)",
+              WebkitBackdropFilter: "blur(14px)",
+              boxShadow: "0 10px 30px rgba(26,15,22,0.12)",
+            }}
+          >
+            <Link href="/" aria-label={`${brand.name} — Accueil`} className="relative z-10">
+              <span
                 style={{
-                  color: scrolled ? "var(--neutral-700)" : "rgba(255,255,255,0.78)",
-                  letterSpacing: "0.01em",
+                  fontFamily: "var(--font-display)",
+                  fontSize: "clamp(1.2rem, 2vw, 1.65rem)",
+                  fontWeight: 600,
+                  color: "var(--rose-principal)",
+                  letterSpacing: "-0.01em",
                 }}
               >
-                {link.label}
-                <span
-                  className="absolute -bottom-0.5 left-0 w-0 group-hover:w-full h-px transition-all duration-300"
-                  style={{ background: scrolled ? "var(--rose-principal)" : "rgba(255,255,255,0.5)" }}
-                />
-              </Link>
-            ))}
-          </nav>
-
-          {/* Desktop auth + CTA */}
-          <div className="hidden md:flex items-center gap-4">
-            <Show when="signed-in">
-              <Link
-                href="/mes-rendez-vous"
-                className="text-sm font-medium transition-opacity hover:opacity-70"
-                style={{ color: scrolled ? "var(--rose-principal)" : "rgba(255,255,255,0.75)" }}
-              >
-                Mes RDV
-              </Link>
-              <UserButton />
-            </Show>
-            <Show when="signed-out">
-              <SignInButton mode="modal">
-                <button
-                  className="text-sm font-medium transition-opacity hover:opacity-70"
-                  style={{ color: scrolled ? "var(--neutral-700)" : "rgba(255,255,255,0.75)" }}
-                >
-                  Connexion
-                </button>
-              </SignInButton>
-            </Show>
-            <Link href="/#booking" className="btn-primary" style={{ padding: "0.625rem 1.5rem", fontSize: "0.875rem" }}>
-              Prendre RDV
+                {brand.name}
+              </span>
             </Link>
-          </div>
 
-          {/* Mobile — hamburger */}
-          <button
-            className="md:hidden flex items-center justify-center w-10 h-10 rounded-xl transition-colors"
-            style={{
-              background: menuOpen
-                ? "var(--rose-50)"
-                : scrolled
-                ? "var(--rose-50)"
-                : "rgba(255,255,255,0.1)",
-            }}
-            onClick={() => setMenuOpen((v) => !v)}
-            aria-expanded={menuOpen}
-            aria-controls="mobile-menu"
-            aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
-          >
-            {menuOpen ? (
-              /* Close × */
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <path d="M2 2l12 12M14 2L2 14" stroke="var(--rose-principal)" strokeWidth="1.75" strokeLinecap="round" />
-              </svg>
-            ) : (
-              /* Hamburger ≡ */
-              <svg width="18" height="14" viewBox="0 0 18 14" fill="none" aria-hidden="true">
-                <path
-                  d="M0 1h18M0 7h18M0 13h18"
-                  stroke={scrolled ? "var(--neutral-800)" : "white"}
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                />
-              </svg>
-            )}
-          </button>
-        </div>
-      </div>
-
-      {/* ── Mobile menu panel ────────────────────────────────────────────── */}
-      <div
-        id="mobile-menu"
-        className={`md:hidden overflow-hidden transition-all duration-300 ${
-          menuOpen ? "max-h-[560px] opacity-100" : "max-h-0 opacity-0"
-        }`}
-        aria-hidden={!menuOpen}
-        style={{
-          background: "white",
-          borderTop: menuOpen ? "1px solid var(--border-rose)" : "none",
-          boxShadow: menuOpen ? "0 12px 40px rgba(26,15,22,0.12)" : "none",
-        }}
-      >
-        {/* Consistent inset matching the header bar */}
-        <div className="px-6 sm:px-10 pt-6 pb-8">
-
-          {/* Nav links */}
-          <nav className="space-y-1 mb-6" aria-label="Navigation mobile">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="flex items-center justify-between px-4 py-4 rounded-2xl text-base font-medium transition-colors group"
-                style={{ color: "var(--neutral-800)" }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = "var(--rose-50)")}
-                onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-                onClick={() => setMenuOpen(false)}
-              >
-                <span>{link.label}</span>
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 14 14"
-                  fill="none"
-                  className="opacity-30 group-hover:opacity-70 transition-opacity"
-                  aria-hidden="true"
+            <nav className="hidden md:flex items-center gap-7" aria-label="Navigation principale">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="text-sm font-medium rounded-full px-3 py-1.5 transition-all duration-300"
+                  style={{ color: "var(--neutral-800)" }}
                 >
-                  <path d="M3 7h8M7 3l4 4-4 4" stroke="var(--rose-principal)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </Link>
-            ))}
-          </nav>
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
 
-          {/* Separator */}
-          <div className="mb-6" style={{ height: "1px", background: "var(--border-rose)" }} />
-
-          {/* Auth + CTA */}
-          <div className="space-y-3">
-            <Show when="signed-in">
-              <Link
-                href="/mes-rendez-vous"
-                className="flex items-center px-4 py-3 rounded-2xl text-sm font-medium transition-colors"
-                style={{ color: "var(--rose-principal)" }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = "var(--rose-50)")}
-                onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-                onClick={() => setMenuOpen(false)}
-              >
-                Mes rendez-vous
-              </Link>
-              <div className="flex items-center gap-3 px-4 pb-2">
+            <div className="hidden md:flex items-center gap-3">
+              <Show when="signed-in">
+                <Link
+                  href="/mes-rendez-vous"
+                  className="text-sm font-medium transition-opacity hover:opacity-70"
+                  style={{ color: "var(--neutral-800)" }}
+                >
+                  Mes rendez-vous
+                </Link>
                 <UserButton />
-                <span className="text-sm" style={{ color: "var(--neutral-700)" }}>Mon compte</span>
-              </div>
-            </Show>
-            <Show when="signed-out">
-              <SignInButton mode="modal">
-                <button
-                  className="flex items-center w-full px-4 py-3 rounded-2xl text-sm font-medium transition-colors text-left"
-                  style={{ color: "var(--rose-principal)" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = "var(--rose-50)")}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-                >
-                  Connexion / Inscription
-                </button>
-              </SignInButton>
-            </Show>
-
-            {/* CTA — inset on both sides, not touching edges */}
-            <div className="pt-2">
-              <Link
-                href="/#booking"
-                className="btn-primary w-full justify-center"
-                style={{ borderRadius: "1rem" }}
-                onClick={() => setMenuOpen(false)}
-              >
-                Prendre rendez-vous
-              </Link>
+              </Show>
+              <Show when="signed-out">
+                <SignInButton mode="modal">
+                  <button
+                    className="text-sm font-medium transition-opacity hover:opacity-70"
+                    style={{ color: "var(--neutral-800)" }}
+                  >
+                    Connexion
+                  </button>
+                </SignInButton>
+              </Show>
             </div>
+
+            <button
+              className="md:hidden relative z-20 flex items-center justify-center w-10 h-10 rounded-xl transition-colors"
+              style={{
+                background: menuOpen
+                  ? "var(--rose-principal)"
+                  : scrolled
+                  ? "var(--rose-50)"
+                  : "var(--rose-50)",
+                boxShadow: menuOpen ? "0 10px 24px rgba(189,17,72,0.35)" : "none",
+              }}
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-expanded={menuOpen}
+              aria-controls="mobile-menu"
+              aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+            >
+              <span className="flex flex-col gap-[5px]" aria-hidden="true">
+                <span
+                  style={{
+                    display: "block",
+                    width: "18px",
+                    height: "1.5px",
+                    borderRadius: "999px",
+                    backgroundColor: menuOpen ? "white" : "var(--neutral-800)",
+                    transition: "transform 280ms cubic-bezier(0.4,0,0.2,1), opacity 200ms ease",
+                    transform: menuOpen ? "rotate(45deg) translate(4px, 4.5px)" : "rotate(0)",
+                  }}
+                />
+                <span
+                  style={{
+                    display: "block",
+                    width: "18px",
+                    height: "1.5px",
+                    borderRadius: "999px",
+                    backgroundColor: menuOpen ? "white" : "var(--neutral-800)",
+                    transition: "opacity 200ms ease, transform 280ms cubic-bezier(0.4,0,0.2,1)",
+                    opacity: menuOpen ? 0 : 1,
+                    transform: menuOpen ? "scaleX(0)" : "scaleX(1)",
+                  }}
+                />
+                <span
+                  style={{
+                    display: "block",
+                    width: "18px",
+                    height: "1.5px",
+                    borderRadius: "999px",
+                    backgroundColor: menuOpen ? "white" : "var(--neutral-800)",
+                    transition: "transform 280ms cubic-bezier(0.4,0,0.2,1), opacity 200ms ease",
+                    transform: menuOpen ? "rotate(-45deg) translate(4px, -4.5px)" : "rotate(0)",
+                  }}
+                />
+              </span>
+            </button>
           </div>
         </div>
-      </div>
-    </header>
+      </header>
+
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.aside
+            id="mobile-menu"
+            className="md:hidden fixed inset-0 z-40"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.24 }}
+            style={{
+              background: "linear-gradient(165deg, #0d0609 0%, #260d1e 45%, #3b1128 100%)",
+            }}
+            aria-hidden={!menuOpen}
+          >
+            <div
+              className="h-full shell pb-12 flex flex-col overflow-y-auto"
+              style={{
+                paddingTop: "max(7.25rem, calc(env(safe-area-inset-top) + 6.25rem))",
+              }}
+            >
+              <nav className="space-y-1.5" aria-label="Navigation mobile">
+                {navLinks.map((link, i) => (
+                  <motion.div
+                    key={link.href}
+                    initial={{ opacity: 0, y: 22 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 12 }}
+                    transition={{ delay: i * 0.06 }}
+                  >
+                    <Link
+                      href={link.href}
+                      onClick={() => {
+                        setMenuOpen(false);
+                        document.body.style.overflow = "";
+                      }}
+                      className="block py-3.5"
+                      style={{
+                        fontFamily: "var(--font-display)",
+                        color: "white",
+                        fontSize: "clamp(1.6rem, 7vw, 2.2rem)",
+                        lineHeight: 1.05,
+                        letterSpacing: "-0.02em",
+                      }}
+                    >
+                      {link.label}
+                    </Link>
+                  </motion.div>
+                ))}
+              </nav>
+
+              <div className="mt-8 md:mt-auto space-y-4 rounded-2xl p-5" style={{ background: "rgba(255,255,255,0.06)" }}>
+                <Show when="signed-in">
+                  <Link
+                    href="/mes-rendez-vous"
+                    className="block text-base font-medium"
+                    style={{ color: "var(--rose-accent)" }}
+                    onClick={() => {
+                      setMenuOpen(false);
+                      document.body.style.overflow = "";
+                    }}
+                  >
+                    Accéder à mes rendez-vous
+                  </Link>
+                </Show>
+
+                <Show when="signed-out">
+                  <SignInButton mode="modal">
+                    <button className="block text-base font-medium text-left" style={{ color: "var(--rose-accent)" }}>
+                      Connexion / Inscription
+                    </button>
+                  </SignInButton>
+                </Show>
+              </div>
+            </div>
+          </motion.aside>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

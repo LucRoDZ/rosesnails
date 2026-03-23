@@ -27,7 +27,7 @@ export function Booking() {
   return (
     <section
       id="booking"
-      className="relative py-28 md:py-40 overflow-hidden"
+      className="relative section-block overflow-hidden"
       style={{
         background: "linear-gradient(160deg, white 0%, #FFF5F8 40%, #FFF0F5 100%)",
       }}
@@ -41,19 +41,19 @@ export function Booking() {
         }}
       />
 
-      <div className="relative max-w-5xl mx-auto px-6 sm:px-10 lg:px-16">
+      <div className="relative shell max-w-5xl">
 
         {/* Header */}
-        <div className="mb-14 md:mb-16">
+        <div className="mb-14 md:mb-20 section-head lg:items-start lg:text-left">
           <span className="section-label">Réservation</span>
-          <div className="divider-rose mt-4 mb-0" />
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 mt-6">
+          <div className="divider-rose mt-1 mb-1 lg:mx-0" />
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mt-2 w-full">
             <h2 className="section-title">
               Prendre{" "}
               <em style={{ fontStyle: "italic", color: "var(--rose-principal)" }}>rendez-vous</em>
             </h2>
             <p
-              className="text-base leading-relaxed max-w-xs"
+              className="text-base leading-relaxed section-copy lg:max-w-xs lg:mx-0"
               style={{ color: "var(--neutral-700)" }}
             >
               Choisissez votre prestation et votre créneau directement en ligne.
@@ -147,7 +147,7 @@ export function Booking() {
               className="font-medium underline underline-offset-2"
               style={{ color: "var(--rose-principal)" }}
             >
-              Réservez directement sur Cal.com
+              Ouvrir la réservation
             </a>
           </p>
         )}

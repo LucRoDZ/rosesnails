@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { brand } from "@/config/brand";
 
 export const metadata: Metadata = {
   title: "Politique de confidentialité",
@@ -46,15 +45,7 @@ export default function PolitiqueConfidentialitePage() {
               </h2>
               <p>
                 Conformément au RGPD, vous disposez d&apos;un droit d&apos;accès, de rectification et de suppression
-                de vos données. Contactez-nous à{" "}
-                <a
-                  href={`mailto:${brand.email}`}
-                  className="underline"
-                  style={{ color: "var(--rose-principal)" }}
-                >
-                  {brand.email}
-                </a>
-                .
+                de vos données. Vous pouvez exercer ces droits directement depuis votre espace client.
               </p>
             </section>
           </div>

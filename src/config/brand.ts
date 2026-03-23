@@ -1,14 +1,6 @@
 export const brand = {
   name: "RosesNails",
   tagline: "L'art des ongles, sublimé.",
-  address: "12 Rue des Roses, 75001 Paris",
-  phone: "+33 6 12 34 56 78",
-  email: "contact@rosesnails.fr",
-  hours: {
-    weekdays: "Mar–Sam : 9h–19h",
-    sunday: "Dim : 10h–16h",
-    closed: "Fermé le lundi",
-  },
   social: {
     instagram: "https://www.instagram.com/r.osesnails/",
   },
@@ -19,10 +11,10 @@ export const brand = {
   cancellationPolicy:
     "Toute annulation doit être effectuée au moins 24h avant le rendez-vous. En cas d'annulation tardive ou de no-show répété, un acompte pourra être demandé pour les prochaines réservations.",
   seo: {
-    title: "RosesNails — Prothésiste Ongulaire Paris",
+    title: "RosesNails — Prothésiste Ongulaire",
     description:
-      "RosesNails, prothésiste ongulaire à Paris. Pose d'ongles, gel, acrylique, nail art personnalisé. Prenez rendez-vous en ligne.",
-    url: "https://rosesnails.fr",
+      "RosesNails, prothésiste ongulaire. Pose d'ongles, gel, acrylique, nail art personnalisé. Prenez rendez-vous en ligne.",
+    url: "https://www.rosesnails.beauty/",
     locale: "fr_FR",
   },
 } as const;

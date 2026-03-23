@@ -3,35 +3,41 @@ import { services, serviceCategories, supplements, type ServiceCategory } from "
 
 const categoryOrder: ServiceCategory[] = ["gel-extension", "ongles-naturels", "press-on"];
 
-const categoryNumbers: Record<ServiceCategory, string> = {
-  "gel-extension": "01",
-  "ongles-naturels": "02",
-  "press-on": "03",
-};
-
 function ServiceCard({ service }: { service: typeof services[0] }) {
   return (
-    <div className="service-card group">
-      {/* Service name */}
-      <p
-        className="text-sm font-medium leading-snug mb-auto"
-        style={{ color: "var(--neutral-800)" }}
-      >
-        {service.name}
-      </p>
-
-      {service.description && (
-        <p className="text-xs mt-1.5 mb-2" style={{ color: "var(--neutral-700)", opacity: 0.6 }}>
-          {service.description}
-        </p>
-      )}
-
-      {/* Bottom row: price + badge */}
-      <div className="flex items-end justify-between gap-2 mt-5 pt-4" style={{ borderTop: "1px solid var(--border-subtle)" }}>
+    <article className="service-card group relative overflow-hidden">
+      <div
+        className="absolute -top-10 -right-10 w-24 h-24 rounded-full"
+        style={{ background: "radial-gradient(circle, rgba(254,146,191,0.18), transparent 65%)" }}
+        aria-hidden="true"
+      />
+      <div className="flex items-start justify-between gap-3 mb-5">
+        <div className="flex-1 min-w-0 pr-2">
+          <p
+            className="font-semibold leading-snug"
+            style={{ fontSize: "1rem", color: "var(--neutral-800)" }}
+          >
+            {service.name}
+          </p>
+          {service.popular && (
+            <span
+              className="inline-block mt-2 text-[10px] font-medium px-2.5 py-0.5 rounded-full"
+              style={{ background: "rgba(254,146,191,0.16)", color: "var(--rose-principal)", border: "1px solid var(--border-rose)" }}
+            >
+              Populaire
+            </span>
+          )}
+          {service.description && (
+            <p className="text-xs mt-2 leading-relaxed" style={{ color: "var(--neutral-700)", opacity: 0.7 }}>
+              {service.description}
+            </p>
+          )}
+        </div>
         <span
+          className="flex-shrink-0"
           style={{
             fontFamily: "var(--font-display)",
-            fontSize: "clamp(1.75rem, 3vw, 2.125rem)",
+            fontSize: "clamp(1.5rem, 2.5vw, 1.75rem)",
             fontWeight: 600,
             lineHeight: 1,
             color: "var(--rose-principal)",
@@ -40,16 +46,17 @@ function ServiceCard({ service }: { service: typeof services[0] }) {
         >
           {service.price}€
         </span>
-        {service.popular && (
-          <span
-            className="text-[10px] font-medium px-2.5 py-1 rounded-full flex-shrink-0"
-            style={{ background: "var(--rose-50)", color: "var(--rose-principal)", border: "1px solid var(--border-rose)" }}
-          >
-            Populaire
-          </span>
-        )}
       </div>
-    </div>
+
+      <div className="pt-4 border-t flex items-center justify-between" style={{ borderColor: "rgba(189,17,72,0.1)" }}>
+        <span className="text-xs uppercase tracking-[0.22em]" style={{ color: "rgba(61,32,48,0.58)" }}>
+          Durée estimée
+        </span>
+        <span className="text-sm font-medium" style={{ color: "var(--neutral-800)" }}>
+          {service.duration} min
+        </span>
+      </div>
+    </article>
   );
 }
 
@@ -65,87 +72,44 @@ export function Services() {
   return (
     <section
       id="services"
-      className="relative py-28 md:py-40 overflow-hidden"
+      className="relative section-block overflow-hidden"
       style={{
-        background: "linear-gradient(180deg, #FDFBF9 0%, #FFF7F9 60%, #FFF0F5 100%)",
+        background: "linear-gradient(178deg, #fcf8f5 0%, #fff6fa 52%, #fff0f5 100%)",
       }}
     >
-      {/* Decorative background number */}
-      <div
-        className="absolute -top-8 right-0 select-none pointer-events-none hidden lg:block"
-        aria-hidden="true"
-        style={{
-          fontFamily: "var(--font-display)",
-          fontSize: "22rem",
-          fontWeight: 700,
-          lineHeight: 1,
-          color: "rgba(189,17,72,0.028)",
-          letterSpacing: "-0.05em",
-        }}
-      >
-        Tarifs
-      </div>
-
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
+      <div className="shell">
 
         {/* Section header */}
-        <div className="mb-20 md:mb-28">
+        <div className="mb-16 md:mb-24 section-head lg:items-start lg:text-left">
           <span className="section-label">Tarifs</span>
-          <div className="divider-rose mt-4 mb-0" />
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mt-6">
-            <h2 className="section-title max-w-lg">
+          <div className="divider-rose mt-1 mb-1 lg:mx-0" />
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-7 mt-2 w-full">
+            <h2 className="section-title max-w-lg lg:max-w-xl">
               Nos{" "}
               <em style={{ fontStyle: "italic", color: "var(--rose-principal)" }}>prestations</em>
             </h2>
             <p
-              className="text-base max-w-sm leading-relaxed"
+              className="text-base leading-relaxed section-copy lg:max-w-sm lg:mx-0"
               style={{ color: "var(--neutral-700)" }}
             >
-              Des poses soignées aux nail art les plus audacieux — chaque set est une œuvre unique.
+              Des poses soignées aux nail art audacieux avec un rendu premium pensé pour durer.
             </p>
           </div>
         </div>
 
         {/* Categories */}
-        <div className="space-y-20 md:space-y-28">
+        <div className="space-y-16 md:space-y-24">
           {categoryOrder.map((cat) => {
             const list = grouped[cat];
             if (!list || list.length === 0) return null;
             return (
               <div key={cat}>
-                {/* Category header */}
-                <div className="flex items-baseline gap-5 mb-10">
-                  <span
-                    className="font-bold select-none flex-shrink-0 leading-none"
-                    style={{
-                      fontFamily: "var(--font-display)",
-                      fontSize: "clamp(3rem, 6vw, 5rem)",
-                      color: "rgba(189,17,72,0.08)",
-                      lineHeight: 1,
-                    }}
-                    aria-hidden="true"
-                  >
-                    {categoryNumbers[cat]}
-                  </span>
-                  <div>
-                    <span className="section-label mb-1 block">Catégorie</span>
-                    <h3
-                      className="font-semibold"
-                      style={{
-                        fontFamily: "var(--font-display)",
-                        fontSize: "clamp(1.5rem, 3vw, 2.25rem)",
-                        color: "var(--neutral-800)",
-                        letterSpacing: "-0.01em",
-                        lineHeight: 1.1,
-                      }}
-                    >
-                      {serviceCategories[cat]}
-                    </h3>
-                  </div>
+                <div className="flex items-center gap-5 mb-9 md:mb-10">
+                  <span className="category-pill">{serviceCategories[cat]}</span>
+                  <div className="flex-1 h-px" style={{ background: "var(--border-subtle)" }} />
                 </div>
 
-                {/* Card grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                   {list.map((service) => (
                     <ServiceCard key={service.id} service={service} />
                   ))}
@@ -155,35 +119,34 @@ export function Services() {
           })}
         </div>
 
-        {/* Supplements — pill-style chips */}
-        <div className="mt-16 md:mt-20">
+        {/* Supplements */}
+        <div className="mt-16 md:mt-24">
           <p
             className="text-xs font-medium uppercase tracking-[0.28em] mb-6"
             style={{ color: "var(--rose-principal)" }}
           >
             Suppléments
           </p>
-          <div className="flex flex-wrap gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {supplements.map((s) => (
               <div
                 key={s.label}
-                className="rounded-2xl px-6 py-5 flex flex-col gap-1.5"
+                className="rounded-2xl px-7 py-6 md:px-8 md:py-7 flex flex-col gap-2 min-h-[130px]"
                 style={{
                   background: "white",
-                  border: "1px solid var(--border-rose)",
-                  boxShadow: "var(--shadow-card)",
-                  minWidth: "200px",
+                  border: "1px solid rgba(189,17,72,0.12)",
+                  boxShadow: "0 8px 24px rgba(26,15,22,0.06)",
                 }}
               >
                 <div className="flex items-center justify-between gap-8">
-                  <span className="font-medium text-sm" style={{ color: "var(--neutral-800)" }}>
+                  <span className="font-medium text-base" style={{ color: "var(--neutral-800)" }}>
                     {s.label}
                   </span>
                   <span
                     className="font-semibold flex-shrink-0"
                     style={{
                       fontFamily: "var(--font-display)",
-                      fontSize: "1.375rem",
+                      fontSize: "1.65rem",
                       color: "var(--rose-principal)",
                       lineHeight: 1,
                     }}
@@ -202,8 +165,8 @@ export function Services() {
         </div>
 
         {/* CTA */}
-        <div className="text-center mt-16 md:mt-20">
-          <Link href="/#booking" className="btn-primary">
+        <div className="cta-zone mt-10 md:mt-14">
+          <Link href="/#booking" className="btn-reservation">
             Réserver maintenant
           </Link>
         </div>

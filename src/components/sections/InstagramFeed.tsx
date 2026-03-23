@@ -65,7 +65,7 @@ export function InstagramFeed() {
                 className="btn-primary"
                 aria-label="Voir notre Instagram"
               >
-                Suivre @rosesnails.fr
+                Suivre @r.osesnails
               </a>
             </div>
           </div>

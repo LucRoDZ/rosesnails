@@ -11,16 +11,38 @@ const NailScene = lazy(() =>
 function HeroFallback() {
   return (
     <div
-      className="absolute inset-0 flex items-center justify-center"
+      className="absolute inset-0"
       aria-hidden="true"
     >
-      <div
-        className="w-40 h-16 rounded-2xl opacity-60"
-        style={{
-          background: "linear-gradient(135deg, #FE92BF 0%, #BD1148 100%)",
-          boxShadow: "0 8px 32px rgba(189,17,72,0.3)",
-        }}
-      />
+      <div className="absolute right-[10%] top-[24%] w-[120px] h-[280px] rotate-[14deg]">
+        <div
+          className="absolute inset-0 rounded-[999px]"
+          style={{
+            background: "linear-gradient(180deg, rgba(255,255,255,0.93) 0%, rgba(251,226,236,0.96) 28%, rgba(246,193,214,0.93) 66%, rgba(241,171,198,0.9) 100%)",
+            border: "1px solid rgba(255,255,255,0.36)",
+            boxShadow: "0 16px 34px rgba(189,17,72,0.16)",
+          }}
+        />
+        <div
+          className="absolute left-[12%] right-[12%] top-[6%] h-[58px] rounded-[999px]"
+          style={{
+            background: "rgba(255,255,255,0.96)",
+            boxShadow: "0 4px 14px rgba(255,255,255,0.28)",
+          }}
+        />
+
+        <div
+          className="absolute left-[28%] top-[28%] w-[4px] h-[126px] rounded-full"
+          style={{ background: "rgba(255,255,255,0.26)" }}
+        />
+        <div
+          className="absolute -inset-6 rounded-[999px]"
+          style={{
+            background: "radial-gradient(circle, rgba(254,146,191,0.16) 0%, transparent 70%)",
+            filter: "blur(5px)",
+          }}
+        />
+      </div>
     </div>
   );
 }
