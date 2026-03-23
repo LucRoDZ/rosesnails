@@ -121,45 +121,44 @@ export function Services() {
 
         {/* Supplements */}
         <div className="mt-16 md:mt-24">
-          <p
-            className="text-xs font-medium uppercase tracking-[0.28em] mb-6"
-            style={{ color: "var(--rose-principal)" }}
-          >
-            Suppléments
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="flex items-center gap-5 mb-9 md:mb-10">
+            <span className="category-pill">Suppléments</span>
+            <div className="flex-1 h-px" style={{ background: "var(--border-subtle)" }} />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
             {supplements.map((s) => (
-              <div
-                key={s.label}
-                className="rounded-2xl px-7 py-6 md:px-8 md:py-7 flex flex-col gap-2 min-h-[80px]"
-                style={{
-                  background: "white",
-                  border: "1px solid rgba(189,17,72,0.12)",
-                  boxShadow: "0 8px 24px rgba(26,15,22,0.06)",
-                }}
-              >
-                <div className="flex items-center justify-between gap-8">
-                  <span className="font-medium text-base" style={{ color: "var(--neutral-800)" }}>
-                    {s.label}
-                  </span>
+              <article key={s.label} className="service-card group relative overflow-hidden">
+                <div
+                  className="absolute -top-10 -right-10 w-24 h-24 rounded-full"
+                  style={{ background: "radial-gradient(circle, rgba(254,146,191,0.18), transparent 65%)" }}
+                  aria-hidden="true"
+                />
+                <div className="flex items-start justify-between gap-3 mb-5">
+                  <div className="flex-1 min-w-0 pr-2">
+                    <p className="font-semibold leading-snug" style={{ fontSize: "1rem", color: "var(--neutral-800)" }}>
+                      {s.label}
+                    </p>
+                    {s.note && (
+                      <p className="text-xs mt-2 leading-relaxed" style={{ color: "var(--neutral-700)", opacity: 0.7 }}>
+                        {s.note}
+                      </p>
+                    )}
+                  </div>
                   <span
-                    className="font-semibold flex-shrink-0"
+                    className="flex-shrink-0"
                     style={{
                       fontFamily: "var(--font-display)",
-                      fontSize: "1.65rem",
-                      color: "var(--rose-principal)",
+                      fontSize: "clamp(1.5rem, 2.5vw, 1.75rem)",
+                      fontWeight: 600,
                       lineHeight: 1,
+                      color: "var(--rose-principal)",
+                      letterSpacing: "-0.01em",
                     }}
                   >
                     {s.price}
                   </span>
                 </div>
-                {s.note && (
-                  <p className="text-xs" style={{ color: "var(--neutral-700)", opacity: 0.6 }}>
-                    {s.note}
-                  </p>
-                )}
-              </div>
+              </article>
             ))}
           </div>
         </div>
