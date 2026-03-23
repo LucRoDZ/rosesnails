@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { brand } from "@/config/brand";
 
 type BeholdPost = {
@@ -54,7 +53,8 @@ async function getInstagramPosts(): Promise<BeholdPost[] | null> {
       next: { revalidate: 3600 },
     });
     if (!res.ok) return null;
-    const posts = (await res.json()) as BeholdPost[];
+    const data = await res.json();
+    const posts = (data.posts ?? data) as BeholdPost[];
     return posts
       .filter((p) => p.mediaType !== "VIDEO" || !!p.thumbnailUrl)
       .slice(0, 8);
@@ -139,12 +139,12 @@ export async function Portfolio() {
                     className="rounded-2xl overflow-hidden relative group cursor-pointer block"
                     aria-label={caption || "Création RosesNails"}
                   >
-                    <Image
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
                       src={src}
                       alt={caption || "Création RosesNails"}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      sizes="(min-width: 1024px) 40vw, 50vw"
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
                     />
                     <div
                       className="absolute inset-x-0 bottom-0 p-4 pt-10"
