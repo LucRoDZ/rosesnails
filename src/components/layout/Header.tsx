@@ -215,6 +215,12 @@ export function Header() {
 
               <div className="mt-8 md:mt-auto space-y-4 rounded-2xl p-5" style={{ background: "rgba(255,255,255,0.06)" }}>
                 <Show when="signed-in">
+                  <div className="flex items-center gap-3">
+                    <UserButton />
+                    <span className="text-sm" style={{ color: "rgba(255,255,255,0.62)" }}>
+                      Mon compte
+                    </span>
+                  </div>
                   <Link
                     href="/mes-rendez-vous"
                     className="block text-base font-medium"

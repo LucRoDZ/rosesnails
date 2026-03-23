@@ -5,18 +5,39 @@ import Link from "next/link";
 
 export function StickyBookingCta() {
   const [visible, setVisible] = useState(false);
+  const [bottomOffset, setBottomOffset] = useState(20);
 
   useEffect(() => {
-    const handleScroll = () => setVisible(window.scrollY > 500);
+    const handleScroll = () => {
+      setVisible(window.scrollY > 500);
+
+      const footer = document.querySelector("footer");
+      if (!footer) {
+        setBottomOffset(20);
+        return;
+      }
+
+      const footerRect = footer.getBoundingClientRect();
+      const overlap = Math.max(0, window.innerHeight - footerRect.top);
+      setBottomOffset(20 + overlap);
+    };
+
+    handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("resize", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
   }, []);
 
   return (
     <div
-      className={`fixed bottom-5 left-1/2 -translate-x-1/2 z-40 transition-all duration-300 md:hidden ${
+      className={`fixed left-1/2 -translate-x-1/2 z-40 transition-all duration-300 md:hidden ${
         visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
       }`}
+      style={{ bottom: `${bottomOffset}px` }}
       aria-hidden={!visible}
     >
       <Link

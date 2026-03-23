@@ -190,8 +190,8 @@ async function AppointmentsList({ userId }: { userId: string }) {
                 <AppointmentCard key={a.id} appointment={a} />
               ))}
             </div>
-            <div className="mt-6">
-              <Link href="/#booking" className="btn-primary" style={{ fontSize: "0.875rem", padding: "0.625rem 1.5rem" }}>
+            <div className="mt-8 mb-2 flex justify-center">
+              <Link href="/#booking" className="btn-primary" style={{ fontSize: "0.875rem", padding: "0.72rem 1.7rem" }}>
                 Prendre un nouveau rendez-vous
               </Link>
             </div>
