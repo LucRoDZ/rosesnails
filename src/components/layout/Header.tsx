@@ -48,7 +48,7 @@ export function Header() {
       >
         <div className="shell pt-3 md:pt-4">
           <div
-            className="flex items-center justify-between h-[64px] md:h-[72px] rounded-2xl px-4 md:px-6 transition-all duration-300"
+            className="mx-1 md:mx-0 flex items-center justify-between h-[64px] md:h-[72px] rounded-2xl px-5 md:px-6 transition-all duration-300"
             style={{
               background: "rgba(255, 255, 255, 0.9)",
               border: "1px solid rgba(189, 17, 72, 0.12)",
@@ -82,17 +82,19 @@ export function Header() {
                   {link.label}
                 </Link>
               ))}
-            </nav>
-
-            <div className="hidden md:flex items-center gap-3">
               <Show when="signed-in">
                 <Link
                   href="/mes-rendez-vous"
-                  className="text-sm font-medium transition-opacity hover:opacity-70"
+                  className="text-sm font-medium rounded-full px-3 py-1.5 transition-all duration-300"
                   style={{ color: "var(--neutral-800)" }}
                 >
                   Mes rendez-vous
                 </Link>
+              </Show>
+            </nav>
+
+            <div className="hidden md:flex items-center gap-3">
+              <Show when="signed-in">
                 <UserButton />
               </Show>
               <Show when="signed-out">
@@ -211,27 +213,48 @@ export function Header() {
                     </Link>
                   </motion.div>
                 ))}
+
+                <Show when="signed-in">
+                  <motion.div
+                    initial={{ opacity: 0, y: 22 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 12 }}
+                    transition={{ delay: navLinks.length * 0.06 }}
+                  >
+                    <Link
+                      href="/mes-rendez-vous"
+                      onClick={() => {
+                        setMenuOpen(false);
+                        document.body.style.overflow = "";
+                      }}
+                      className="block py-3.5"
+                      style={{
+                        fontFamily: "var(--font-display)",
+                        color: "white",
+                        fontSize: "clamp(1.6rem, 7vw, 2.2rem)",
+                        lineHeight: 1.05,
+                        letterSpacing: "-0.02em",
+                      }}
+                    >
+                      Mes rendez-vous
+                    </Link>
+                  </motion.div>
+                </Show>
               </nav>
 
               <div className="mt-8 md:mt-auto space-y-4 rounded-2xl p-5" style={{ background: "rgba(255,255,255,0.06)" }}>
                 <Show when="signed-in">
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 rounded-xl px-3 py-2" style={{ background: "rgba(255,255,255,0.07)" }}>
                     <UserButton />
-                    <span className="text-sm" style={{ color: "rgba(255,255,255,0.62)" }}>
-                      Mon compte
-                    </span>
+                    <div>
+                      <p className="text-xs uppercase tracking-[0.18em]" style={{ color: "rgba(255,255,255,0.42)" }}>
+                        Compte
+                      </p>
+                      <p className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.86)" }}>
+                        Mon compte
+                      </p>
+                    </div>
                   </div>
-                  <Link
-                    href="/mes-rendez-vous"
-                    className="block text-base font-medium"
-                    style={{ color: "var(--rose-accent)" }}
-                    onClick={() => {
-                      setMenuOpen(false);
-                      document.body.style.overflow = "";
-                    }}
-                  >
-                    Accéder à mes rendez-vous
-                  </Link>
                 </Show>
 
                 <Show when="signed-out">
