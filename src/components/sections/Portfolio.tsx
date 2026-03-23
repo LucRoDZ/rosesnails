@@ -11,71 +11,110 @@ const gradients = [
 
 export function Portfolio() {
   return (
-    <section id="portfolio" className="py-16 md:py-24" style={{ backgroundColor: "white" }}>
-      <div className="max-w-6xl mx-auto px-5 sm:px-8">
+    <section
+      id="portfolio"
+      className="relative py-28 md:py-40 overflow-hidden"
+      style={{
+        background: "linear-gradient(145deg, #FFF0F5 0%, #FAF4F8 35%, #FDFBF9 70%, white 100%)",
+      }}
+    >
+      {/* Decorative orb top-right */}
+      <div
+        className="absolute -top-32 -right-32 w-[600px] h-[600px] rounded-full pointer-events-none"
+        aria-hidden="true"
+        style={{
+          background: "radial-gradient(circle, rgba(254,146,191,0.12) 0%, transparent 65%)",
+        }}
+      />
+      {/* Decorative orb bottom-left */}
+      <div
+        className="absolute -bottom-20 -left-20 w-[400px] h-[400px] rounded-full pointer-events-none"
+        aria-hidden="true"
+        style={{
+          background: "radial-gradient(circle, rgba(189,17,72,0.06) 0%, transparent 65%)",
+        }}
+      />
 
-        {/* Header */}
-        <div className="text-center mb-14">
+      <div className="relative max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
+
+        {/* Header — title + description stacked, button separate */}
+        <div className="mb-16 md:mb-24">
           <span className="section-label">Portfolio</span>
-          <div className="divider-rose-center" />
-          <h2 className="section-title">Nos créations</h2>
-          <p className="mt-4 max-w-md mx-auto text-sm md:text-base" style={{ color: "var(--neutral-700)" }}>
-            Chaque set est unique. Retrouvez nos dernières réalisations.
-          </p>
+          <div className="divider-rose mt-4 mb-7" />
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
+            <h2 className="section-title">
+              Nos{" "}
+              <em style={{ fontStyle: "italic", color: "var(--rose-principal)" }}>créations</em>
+            </h2>
+            <div className="flex flex-col gap-5 lg:items-end lg:max-w-xs">
+              <p
+                className="text-base leading-relaxed lg:text-right"
+                style={{ color: "var(--neutral-700)" }}
+              >
+                Chaque set est unique. Retrouvez nos dernières réalisations.
+              </p>
+              <a
+                href={brand.social.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-outline self-start lg:self-auto"
+              >
+                Voir sur Instagram
+              </a>
+            </div>
+          </div>
         </div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+        {/* Editorial grid */}
+        <div className="portfolio-grid">
           {gradients.map((gradient, i) => (
             <div
               key={i}
-              className="aspect-square rounded-2xl overflow-hidden relative group"
+              className="rounded-2xl overflow-hidden relative group cursor-pointer"
               style={{ background: gradient }}
               aria-label={`Nail Art ${i + 1}`}
             >
-              {/* Abstract nail shape */}
+              {/* Decorative shape */}
               <div
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-transform duration-500 group-hover:scale-110"
+                className="absolute inset-0 flex items-center justify-center opacity-25 group-hover:opacity-10 transition-opacity duration-500"
                 aria-hidden="true"
               >
-                <svg width="52" height="64" viewBox="0 0 52 64" fill="none">
-                  <rect
-                    x="4" y="20" width="44" height="40"
-                    rx="22"
-                    fill="rgba(255,255,255,0.22)"
-                  />
-                  <rect
-                    x="10" y="4" width="32" height="24"
-                    rx="16"
-                    fill="rgba(255,255,255,0.18)"
-                  />
+                <svg width="60" height="74" viewBox="0 0 60 74" fill="none">
+                  <rect x="4" y="24" width="52" height="46" rx="26" fill="rgba(255,255,255,0.3)" />
+                  <rect x="14" y="4" width="32" height="28" rx="16" fill="rgba(255,255,255,0.24)" />
                 </svg>
               </div>
 
               {/* Hover overlay */}
               <div
-                className="absolute inset-0 flex items-end p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                style={{ background: "linear-gradient(to top, rgba(26,15,22,0.55), transparent)" }}
+                className="absolute inset-0 flex items-end p-5 opacity-0 group-hover:opacity-100 transition-all duration-300"
+                style={{ background: "linear-gradient(to top, rgba(13,6,9,0.65), transparent 55%)" }}
               >
-                <p className="text-white text-xs font-medium tracking-wide">Nail Art #{i + 1}</p>
+                <p
+                  className="text-white text-sm font-medium"
+                  style={{ fontFamily: "var(--font-body)", letterSpacing: "0.02em" }}
+                >
+                  Nail Art #{i + 1}
+                </p>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Instagram link */}
-        <p className="text-center mt-8 text-sm" style={{ color: "var(--neutral-700)" }}>
-          Plus de créations sur{" "}
+        {/* Bottom CTA — well separated from the grid */}
+        <div className="flex flex-col items-center gap-3 mt-14">
+          <p className="text-sm" style={{ color: "var(--neutral-700)" }}>
+            Plus de créations disponibles sur notre Instagram
+          </p>
           <a
             href={brand.social.instagram}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-semibold underline underline-offset-2 hover:opacity-70 transition-opacity"
-            style={{ color: "var(--rose-principal)" }}
+            className="btn-primary"
           >
-            Instagram
+            Suivre @rosesnails.fr
           </a>
-        </p>
+        </div>
       </div>
     </section>
   );

@@ -36,53 +36,80 @@ const faqs = [
   },
 ];
 
-function FaqItem({ faq }: { faq: typeof faqs[0] }) {
+function FaqItem({ faq, index }: { faq: typeof faqs[0]; index: number }) {
   const [open, setOpen] = useState(false);
   const id = `faq-answer-${faq.id}`;
 
   return (
     <div
       className="border-b last:border-b-0 transition-colors duration-200"
-      style={{ borderColor: "var(--border-subtle)" }}
+      style={{
+        borderColor: "rgba(189,17,72,0.08)",
+        background: open ? "rgba(255,240,245,0.5)" : "transparent",
+      }}
     >
       <button
-        className="w-full py-5 flex items-center justify-between text-left gap-4 group"
+        className="w-full px-8 py-8 flex items-center justify-between text-left gap-8 group"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-controls={id}
       >
-        <span
-          className="font-medium text-sm md:text-base leading-snug transition-colors"
-          style={{ color: open ? "var(--rose-principal)" : "var(--neutral-800)" }}
-        >
-          {faq.question}
-        </span>
-        <span
-          className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center transition-all duration-200"
+        <div className="flex items-center gap-6 min-w-0">
+          {/* Number accent */}
+          <span
+            className="flex-shrink-0 font-semibold select-none tabular-nums"
+            style={{
+              fontFamily: "var(--font-display)",
+              fontSize: "1.5rem",
+              lineHeight: 1,
+              color: open ? "var(--rose-principal)" : "rgba(189,17,72,0.15)",
+              transition: "color 200ms ease",
+              minWidth: "2.25rem",
+            }}
+          >
+            {String(index + 1).padStart(2, "0")}
+          </span>
+          <span
+            className="font-medium leading-snug"
+            style={{
+              fontSize: "clamp(0.9375rem, 1.5vw, 1.0625rem)",
+              color: open ? "var(--rose-principal)" : "var(--neutral-800)",
+              transition: "color 200ms ease",
+            }}
+          >
+            {faq.question}
+          </span>
+        </div>
+
+        {/* Chevron */}
+        <div
+          className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300"
           style={{
-            background: open ? "var(--rose-principal)" : "var(--rose-50)",
-            color: open ? "white" : "var(--rose-principal)",
+            background: open ? "var(--rose-principal)" : "rgba(189,17,72,0.07)",
           }}
-          aria-hidden="true"
         >
           <svg
-            className={`w-3.5 h-3.5 transition-transform duration-200 ${open ? "rotate-45" : ""}`}
+            width="14"
+            height="14"
             viewBox="0 0 14 14"
-            fill="currentColor"
+            fill="none"
+            className={`transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+            style={{ color: open ? "white" : "var(--rose-principal)" }}
+            aria-hidden="true"
           >
-            <path d="M8 1H6v5H1v2h5v5h2V8h5V6H8V1z" />
+            <path d="M2.5 5l4.5 4.5L11.5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-        </span>
+        </div>
       </button>
 
       <div
         id={id}
         className="overflow-hidden transition-all duration-300"
-        style={{ maxHeight: open ? "300px" : "0" }}
+        style={{ maxHeight: open ? "500px" : "0" }}
       >
         <p
-          className="pb-5 text-sm leading-relaxed"
-          style={{ color: "var(--neutral-700)" }}
+          className="px-8 pb-8 text-base leading-relaxed"
+          style={{ color: "var(--neutral-700)", paddingLeft: "calc(2rem + 2.25rem + 1.5rem)" }}
         >
           {faq.answer}
         </p>
@@ -93,26 +120,51 @@ function FaqItem({ faq }: { faq: typeof faqs[0] }) {
 
 export function Faq() {
   return (
-    <section id="faq" className="py-16 md:py-24" style={{ backgroundColor: "var(--neutral-50)" }}>
-      <div className="max-w-2xl mx-auto px-5 sm:px-8">
+    <section
+      id="faq"
+      className="relative py-28 md:py-40 overflow-hidden"
+      style={{ background: "var(--rose-50)" }}
+    >
+      {/* Decorative orbs */}
+      <div
+        className="absolute top-0 right-0 w-[500px] h-[500px] pointer-events-none"
+        aria-hidden="true"
+        style={{
+          background: "radial-gradient(circle at top right, rgba(254,146,191,0.14) 0%, transparent 65%)",
+        }}
+      />
+      <div
+        className="absolute bottom-0 left-0 w-[400px] h-[400px] pointer-events-none"
+        aria-hidden="true"
+        style={{
+          background: "radial-gradient(circle at bottom left, rgba(189,17,72,0.06) 0%, transparent 65%)",
+        }}
+      />
+
+      <div className="relative max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
 
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="mb-16 md:mb-20">
           <span className="section-label">Questions fréquentes</span>
-          <div className="divider-rose-center" />
-          <h2 className="section-title">Vos questions</h2>
+          <div className="divider-rose mt-4 mb-0" />
+          <h2 className="section-title mt-6">
+            Vos{" "}
+            <em style={{ fontStyle: "italic", color: "var(--rose-principal)" }}>questions</em>
+          </h2>
         </div>
 
-        {/* Accordion */}
+        {/* Single full-width accordion card */}
         <div
-          className="rounded-2xl bg-white border divide-y-0 overflow-hidden"
-          style={{ borderColor: "var(--border-rose)", boxShadow: "var(--shadow-card)" }}
+          className="rounded-2xl overflow-hidden"
+          style={{
+            background: "white",
+            border: "1px solid rgba(189,17,72,0.1)",
+            boxShadow: "0 8px 48px rgba(189,17,72,0.08), 0 2px 16px rgba(26,15,22,0.06)",
+          }}
         >
-          <div className="px-6 md:px-8">
-            {faqs.map((faq) => (
-              <FaqItem key={faq.id} faq={faq} />
-            ))}
-          </div>
+          {faqs.map((faq, i) => (
+            <FaqItem key={faq.id} faq={faq} index={i} />
+          ))}
         </div>
       </div>
     </section>

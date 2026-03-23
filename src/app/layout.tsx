@@ -1,18 +1,21 @@
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
-import { Playfair_Display, Inter } from "next/font/google";
+import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import { brand } from "@/config/brand";
 import "./globals.css";
 
-const playfair = Playfair_Display({
+const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
   variable: "--font-display",
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
-const inter = Inter({
+const dmSans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-body",
+  weight: ["300", "400", "500", "600"],
   display: "swap",
 });
 
@@ -49,7 +52,7 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="fr" className={`${playfair.variable} ${inter.variable}`}>
+      <html lang="fr" className={`${cormorant.variable} ${dmSans.variable}`}>
         <body className="antialiased">
           {children}
         </body>

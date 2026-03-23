@@ -22,45 +22,79 @@ export function Hero() {
     <section
       ref={heroRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
-      style={{ background: "linear-gradient(155deg, #0f0a0d 0%, #1a1018 50%, #2d1024 100%)" }}
+      style={{ background: "linear-gradient(155deg, #0a0608 0%, #160c13 40%, #260d1e 100%)" }}
       aria-label="Accueil"
     >
       {/* 3D canvas */}
       <HeroCanvas scrollProgress={scrollProgress} />
 
-      {/* Radial vignette for text readability */}
+      {/* Vignette */}
       <div
         className="absolute inset-0 pointer-events-none"
         aria-hidden="true"
         style={{
-          background: "radial-gradient(ellipse 80% 70% at 50% 50%, transparent 20%, rgba(15,10,13,0.65) 100%)",
+          background: "radial-gradient(ellipse 90% 75% at 50% 55%, transparent 10%, rgba(10,6,8,0.72) 100%)",
         }}
       />
 
       {/* Content */}
-      <div className="relative z-10 text-center px-5 max-w-2xl mx-auto">
-        {/* Label */}
-        <p className="section-label-dark mb-4">Prothésiste ongulaire</p>
+      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+
+        {/* Pill label */}
+        <div
+          className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full mb-10"
+          style={{
+            border: "1px solid rgba(254,146,191,0.2)",
+            background: "rgba(254,146,191,0.06)",
+          }}
+        >
+          <span
+            className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+            style={{ background: "var(--rose-accent)" }}
+            aria-hidden="true"
+          />
+          <span
+            style={{
+              fontFamily: "var(--font-body)",
+              fontSize: "0.6875rem",
+              fontWeight: 500,
+              letterSpacing: "0.3em",
+              textTransform: "uppercase",
+              color: "var(--rose-accent)",
+            }}
+          >
+            Prothésiste ongulaire · Paris
+          </span>
+        </div>
 
         {/* Headline */}
         <h1
-          className="font-bold text-white leading-[1.1] mb-6"
           style={{
             fontFamily: "var(--font-display)",
-            fontSize: "clamp(2.75rem, 8vw, 5.5rem)",
+            fontSize: "clamp(3.25rem, 10vw, 7rem)",
+            fontWeight: 600,
+            lineHeight: 1.0,
+            letterSpacing: "-0.02em",
+            color: "white",
           }}
         >
-          L&apos;art des ongles,{" "}
-          <em className="not-italic" style={{ color: "var(--rose-accent)" }}>sublimé.</em>
+          L&apos;art des ongles,
+          <br />
+          <em
+            className="not-italic"
+            style={{ color: "var(--rose-accent)", fontStyle: "italic" }}
+          >
+            sublimé.
+          </em>
         </h1>
 
-        {/* Divider accent */}
+        {/* Divider */}
         <div
-          className="mx-auto mb-6"
+          className="mx-auto mt-9 mb-9"
           style={{
-            width: "2.5rem",
+            width: "4rem",
             height: "1.5px",
-            background: "linear-gradient(90deg, var(--rose-principal), var(--rose-accent))",
+            background: "linear-gradient(90deg, transparent, var(--rose-principal), var(--rose-accent), transparent)",
             borderRadius: "1px",
           }}
           aria-hidden="true"
@@ -68,35 +102,40 @@ export function Hero() {
 
         {/* Subtitle */}
         <p
-          className="text-base md:text-lg mb-10 max-w-sm mx-auto leading-relaxed"
-          style={{ color: "rgba(255,255,255,0.65)" }}
+          className="mb-14 leading-relaxed mx-auto"
+          style={{
+            color: "rgba(255,255,255,0.5)",
+            fontSize: "clamp(1rem, 2vw, 1.125rem)",
+            maxWidth: "30rem",
+            fontFamily: "var(--font-body)",
+          }}
         >
           Pose gel &amp; nail art personnalisé — chaque set est une œuvre.
         </p>
 
         {/* CTAs */}
-        <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
-          <Link href="/#booking" className="btn-primary px-8 py-3.5">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <Link href="/#booking" className="btn-primary">
             Prendre rendez-vous
           </Link>
-          <Link href="/#services" className="btn-ghost px-8 py-3.5">
-            Nos prestations
+          <Link href="/#services" className="btn-ghost">
+            Voir les prestations
           </Link>
         </div>
       </div>
 
       {/* Scroll indicator */}
       <div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2.5"
         aria-hidden="true"
       >
-        <p className="text-xs uppercase tracking-[0.2em]" style={{ color: "rgba(255,255,255,0.35)" }}>
-          Découvrir
-        </p>
         <div
-          className="w-px h-10"
-          style={{ background: "linear-gradient(to bottom, rgba(255,255,255,0.35), transparent)" }}
+          className="w-px h-14"
+          style={{ background: "linear-gradient(to bottom, rgba(255,255,255,0.25), transparent)" }}
         />
+        <svg width="12" height="8" viewBox="0 0 12 8" fill="none" style={{ color: "rgba(255,255,255,0.25)" }}>
+          <path d="M1 1l5 5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
       </div>
     </section>
   );
