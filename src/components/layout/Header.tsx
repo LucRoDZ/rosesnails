@@ -15,7 +15,7 @@ const navLinks = [
 ];
 
 export function Header() {
-  const { openUserProfile } = useClerk();
+  const { openUserProfile, signOut } = useClerk();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -58,7 +58,7 @@ export function Header() {
               boxShadow: "0 10px 30px rgba(26,15,22,0.12)",
             }}
           >
-            <div className="h-full flex items-center justify-between px-7 md:px-9">
+            <div className="h-full flex items-center justify-between" style={{ paddingLeft: "0.75rem", paddingRight: "0.75rem" }}>
               <Link href="/" aria-label={`${brand.name} — Accueil`} className="relative z-10">
                 <span
                   style={{
@@ -273,6 +273,13 @@ export function Header() {
                       </p>
                     </div>
                   </div>
+                  <button
+                    onClick={() => { signOut(); setMenuOpen(false); }}
+                    className="w-full text-left text-sm font-medium px-3 py-2 rounded-xl transition-colors"
+                    style={{ color: "rgba(255,255,255,0.55)" }}
+                  >
+                    Se déconnecter
+                  </button>
                 </Show>
 
                 <Show when="signed-out">
