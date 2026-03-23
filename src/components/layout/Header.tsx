@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Show, SignInButton, UserButton } from "@clerk/nextjs";
+import { Show, SignInButton, UserButton, useClerk } from "@clerk/nextjs";
 import { AnimatePresence, motion } from "framer-motion";
 import { brand } from "@/config/brand";
 
@@ -15,6 +15,7 @@ const navLinks = [
 ];
 
 export function Header() {
+  const { openUserProfile } = useClerk();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -48,7 +49,7 @@ export function Header() {
       >
         <div className="shell pt-3 md:pt-4">
           <div
-            className="mx-1 md:mx-0 flex items-center justify-between h-[64px] md:h-[72px] rounded-2xl px-5 md:px-6 transition-all duration-300"
+            className="mx-1 md:mx-0 h-[64px] md:h-[72px] rounded-2xl transition-all duration-300"
             style={{
               background: "rgba(255, 255, 255, 0.9)",
               border: "1px solid rgba(189, 17, 72, 0.12)",
@@ -57,19 +58,20 @@ export function Header() {
               boxShadow: "0 10px 30px rgba(26,15,22,0.12)",
             }}
           >
-            <Link href="/" aria-label={`${brand.name} — Accueil`} className="relative z-10">
-              <span
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontSize: "clamp(1.2rem, 2vw, 1.65rem)",
-                  fontWeight: 600,
-                  color: "var(--rose-principal)",
-                  letterSpacing: "-0.01em",
-                }}
-              >
-                {brand.name}
-              </span>
-            </Link>
+            <div className="h-full flex items-center justify-between px-7 md:px-9">
+              <Link href="/" aria-label={`${brand.name} — Accueil`} className="relative z-10">
+                <span
+                  style={{
+                    fontFamily: "var(--font-display)",
+                    fontSize: "clamp(1.2rem, 2vw, 1.65rem)",
+                    fontWeight: 600,
+                    color: "var(--rose-principal)",
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  {brand.name}
+                </span>
+              </Link>
 
             <nav className="hidden md:flex items-center gap-7" aria-label="Navigation principale">
               {navLinks.map((link) => (
@@ -161,6 +163,7 @@ export function Header() {
                 />
               </span>
             </button>
+            </div>
           </div>
         </div>
       </header>
@@ -244,8 +247,23 @@ export function Header() {
 
               <div className="mt-8 md:mt-auto space-y-4 rounded-2xl p-5" style={{ background: "rgba(255,255,255,0.06)" }}>
                 <Show when="signed-in">
-                  <div className="flex items-center gap-3 rounded-xl px-3 py-2" style={{ background: "rgba(255,255,255,0.07)" }}>
-                    <UserButton />
+                  <div
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => openUserProfile()}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        openUserProfile();
+                      }
+                    }}
+                    className="flex items-center gap-3 rounded-xl px-3 py-2 cursor-pointer transition-colors"
+                    style={{ background: "rgba(255,255,255,0.07)" }}
+                    aria-label="Ouvrir mon compte"
+                  >
+                    <span className="pointer-events-none">
+                      <UserButton />
+                    </span>
                     <div>
                       <p className="text-xs uppercase tracking-[0.18em]" style={{ color: "rgba(255,255,255,0.42)" }}>
                         Compte

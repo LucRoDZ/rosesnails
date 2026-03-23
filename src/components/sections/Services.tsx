@@ -131,7 +131,7 @@ export function Services() {
             {supplements.map((s) => (
               <div
                 key={s.label}
-                className="rounded-2xl px-7 py-6 md:px-8 md:py-7 flex flex-col gap-2 min-h-[130px]"
+                className="rounded-2xl px-7 py-6 md:px-8 md:py-7 flex flex-col gap-2 min-h-[80px]"
                 style={{
                   background: "white",
                   border: "1px solid rgba(189,17,72,0.12)",
