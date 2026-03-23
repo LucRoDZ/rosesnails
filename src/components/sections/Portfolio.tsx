@@ -1,6 +1,16 @@
+import Image from "next/image";
 import { brand } from "@/config/brand";
 
-const items = [
+type BeholdPost = {
+  id: string;
+  mediaUrl: string;
+  thumbnailUrl?: string;
+  mediaType: "IMAGE" | "VIDEO" | "CAROUSEL_ALBUM";
+  permalink: string;
+  caption?: string;
+};
+
+const fallbackItems = [
   {
     gradient: "linear-gradient(135deg, #FFB5D3 0%, #FE92BF 50%, #BD1148 100%)",
     label: "Gel extension · Nude",
@@ -35,7 +45,27 @@ const items = [
   },
 ];
 
-export function Portfolio() {
+async function getInstagramPosts(): Promise<BeholdPost[] | null> {
+  const feedId = process.env.BEHOLD_FEED_ID;
+  if (!feedId || feedId === "your_behold_feed_id_here") return null;
+
+  try {
+    const res = await fetch(`https://feeds.behold.so/${feedId}`, {
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return null;
+    const posts = (await res.json()) as BeholdPost[];
+    return posts
+      .filter((p) => p.mediaType !== "VIDEO" || !!p.thumbnailUrl)
+      .slice(0, 8);
+  } catch {
+    return null;
+  }
+}
+
+export async function Portfolio() {
+  const posts = await getInstagramPosts();
+
   return (
     <section
       id="portfolio"
@@ -92,40 +122,75 @@ export function Portfolio() {
           </div>
         </div>
 
-        {/* Editorial grid */}
+        {/* Grid */}
         <div className="portfolio-grid">
-          {items.map((item, i) => (
-            <div
-              key={i}
-              className="rounded-2xl overflow-hidden relative group cursor-pointer"
-              style={{ background: item.gradient }}
-              aria-label={item.label}
-            >
-              {/* Decorative nail shape */}
-              <div
-                className="absolute inset-0 flex items-center justify-center opacity-20 group-hover:opacity-10 transition-opacity duration-500"
-                aria-hidden="true"
-              >
-                <svg width="60" height="74" viewBox="0 0 60 74" fill="none">
-                  <rect x="4" y="24" width="52" height="46" rx="26" fill="rgba(255,255,255,0.3)" />
-                  <rect x="14" y="4" width="32" height="28" rx="16" fill="rgba(255,255,255,0.24)" />
-                </svg>
-              </div>
-
-              {/* Always-visible label at bottom */}
-              <div
-                className="absolute inset-x-0 bottom-0 p-4 pt-10"
-                style={{ background: "linear-gradient(to top, rgba(13,6,9,0.6), transparent)" }}
-              >
-                <p
-                  className="text-white text-xs font-medium"
-                  style={{ fontFamily: "var(--font-body)", letterSpacing: "0.04em" }}
+          {posts
+            ? posts.map((post) => {
+                const src =
+                  post.mediaType === "VIDEO" ? post.thumbnailUrl! : post.mediaUrl;
+                const caption =
+                  post.caption?.split("\n")[0]?.replace(/#\S+/g, "").trim().slice(0, 80) ?? "";
+                return (
+                  <a
+                    key={post.id}
+                    href={post.permalink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-2xl overflow-hidden relative group cursor-pointer block"
+                    aria-label={caption || "Création RosesNails"}
+                  >
+                    <Image
+                      src={src}
+                      alt={caption || "Création RosesNails"}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      sizes="(min-width: 1024px) 40vw, 50vw"
+                    />
+                    <div
+                      className="absolute inset-x-0 bottom-0 p-4 pt-10"
+                      style={{ background: "linear-gradient(to top, rgba(13,6,9,0.65), transparent)" }}
+                    >
+                      {caption && (
+                        <p
+                          className="text-white text-xs font-medium"
+                          style={{ fontFamily: "var(--font-body)", letterSpacing: "0.04em" }}
+                        >
+                          {caption}
+                        </p>
+                      )}
+                    </div>
+                  </a>
+                );
+              })
+            : fallbackItems.map((item, i) => (
+                <div
+                  key={i}
+                  className="rounded-2xl overflow-hidden relative group cursor-pointer"
+                  style={{ background: item.gradient }}
+                  aria-label={item.label}
                 >
-                  {item.label}
-                </p>
-              </div>
-            </div>
-          ))}
+                  <div
+                    className="absolute inset-0 flex items-center justify-center opacity-20 group-hover:opacity-10 transition-opacity duration-500"
+                    aria-hidden="true"
+                  >
+                    <svg width="60" height="74" viewBox="0 0 60 74" fill="none">
+                      <rect x="4" y="24" width="52" height="46" rx="26" fill="rgba(255,255,255,0.3)" />
+                      <rect x="14" y="4" width="32" height="28" rx="16" fill="rgba(255,255,255,0.24)" />
+                    </svg>
+                  </div>
+                  <div
+                    className="absolute inset-x-0 bottom-0 p-4 pt-10"
+                    style={{ background: "linear-gradient(to top, rgba(13,6,9,0.6), transparent)" }}
+                  >
+                    <p
+                      className="text-white text-xs font-medium"
+                      style={{ fontFamily: "var(--font-body)", letterSpacing: "0.04em" }}
+                    >
+                      {item.label}
+                    </p>
+                  </div>
+                </div>
+              ))}
         </div>
       </div>
     </section>

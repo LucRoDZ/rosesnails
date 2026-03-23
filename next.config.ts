@@ -9,6 +9,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "**.supabase.co",
       },
+      {
+        protocol: "https",
+        hostname: "**.cdninstagram.com",
+      },
     ],
   },
   // Empty turbopack config to silence the webpack config warning
