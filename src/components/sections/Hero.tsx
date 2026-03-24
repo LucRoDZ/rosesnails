@@ -58,14 +58,14 @@ export function Hero() {
           <span
             style={{
               fontFamily: "var(--font-body)",
-              fontSize: "0.6875rem",
+              fontSize: "0.8875rem",
               fontWeight: 500,
               letterSpacing: "0.3em",
               textTransform: "uppercase",
               color: "var(--rose-accent)",
             }}
           >
-            Prothésiste ongulaire
+          Prothésiste ongulaire
           </span>
         </div>
 
@@ -104,7 +104,7 @@ export function Hero() {
 
         {/* Subtitle */}
         <p
-          className="mb-14 leading-relaxed mx-auto"
+          className="mb-14 text-center leading-relaxed mx-auto"
           style={{
             color: "rgba(255,255,255,0.5)",
             fontSize: "clamp(1rem, 2vw, 1.125rem)",
@@ -112,7 +112,7 @@ export function Hero() {
             fontFamily: "var(--font-body)",
           }}
         >
-          Pose gel &amp; nail art personnalisé — chaque set est une œuvre.
+        Pose gel &amp; nail art personnalisé — chaque set est une œuvre.
         </p>
 
         {/* CTAs */}

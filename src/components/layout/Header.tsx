@@ -10,8 +10,8 @@ import { brand } from "@/config/brand";
 const navLinks = [
   { href: "/#services", label: "Prestations" },
   { href: "/#portfolio", label: "Portfolio" },
-  { href: "/#faq", label: "FAQ" },
   { href: "/#booking", label: "Réservation" },
+  { href: "/#faq", label: "FAQ" },
 ];
 
 export function Header() {

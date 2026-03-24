@@ -52,12 +52,6 @@ export function Booking() {
               Prendre{" "}
               <em style={{ fontStyle: "italic", color: "var(--rose-principal)" }}>rendez-vous</em>
             </h2>
-            <p
-              className="text-base leading-relaxed section-copy lg:max-w-xs lg:mx-0"
-              style={{ color: "var(--neutral-700)" }}
-            >
-              Choisissez votre prestation et votre créneau directement en ligne.
-            </p>
           </div>
         </div>
 
